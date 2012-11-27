@@ -1,0 +1,16 @@
+I didn't work out how to do this with the makefile.
+
+1. Program mcu:
+	make prog
+
+2. Start debugger:
+	mspdebug rf2500
+  Start server in mspdebug:
+	gdb
+
+3. Start ddd and msp430-gdb:
+	ddd --debugger msp430-gdb myfile.elf
+   Put a command into msp430-gdb:
+	target remote localhost:2000
+
+4. Click contine to run, now debug!!
