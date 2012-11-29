@@ -10,6 +10,7 @@
 #define BLUE	0x0000FF
 #define INDIGO	0x4B0082
 #define VIOLET	0x8F00FF
+#define WHITE   0xFFFFFF
 
 void send(unsigned long c);
 
@@ -43,6 +44,11 @@ send(GREEN);
 send(BLUE);
 send(INDIGO);
 send(VIOLET);
+
+unsigned char i;
+for ( i = 0 ; i < 43 ; i++ ) {
+  send(WHITE);
+}
 
 P1OUT = 1;
 
