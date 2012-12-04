@@ -3,15 +3,15 @@
 
 #include <msp430.h>
 
-#define	RED	0xFF0000
-#define ORANGE	0xFF2000
-#define YELLOW	0xFF7000
-#define	GREEN	0x00FF00
-#define BLUE	0x0000FF
-#define INDIGO	0xFF0050
-#define WHITE   0xFFFFFF
+#define	RED	0xFF,0x00,0x00
+#define ORANGE	0xFF,0x20,0x00
+#define YELLOW	0xFF,0x70,0x00
+#define	GREEN	0x00,0xFF,0x00
+#define BLUE	0x00,0x00,0xFF
+#define INDIGO	0xFF,0x00,0x50
+#define WHITE   0xFF,0xFF,0xFF
 
-void send(unsigned long c);
+void send(unsigned char r, unsigned char g, unsigned char b);
 
 int main(void) {
 
@@ -51,22 +51,22 @@ _BIS_SR(LPM4_bits);	//Go into Low power mode 4, main stops here
 
 }
 
-void send(unsigned long c) {
+void send(unsigned char r, unsigned char g, unsigned char b) {
   //R
   //wait for USIIFG to be clear
-  while (0 == (USICTL1 & 1)) {}
-  USICTL1 = USICKPH | USIIE;
-  USISRL = c >> 16; //load the 8 "red" bits into the buffer
+  while (0 == (USICTL1 & USIIFG)) {}
+  USICTL1 = USICTL1 - USIIFG;
+  USISRL = r; //load the 8 "red" bits into the buffer
   USICNT = 8;       //tell the USI to clock 8 bits out
   //G
-  while (0 == (USICTL1 & 1)) {}
-  USICTL1 = USICKPH | USIIE;
-  USISRL = c >> 8  ;
+  while (0 == (USICTL1 & USIIFG)) {}
+  USICTL1 = USICTL1 - USIIFG;
+  USISRL = g;
   USICNT = 8;
   //B
-  while (0 == (USICTL1 & 1)) {}
-  USICTL1 = USICKPH | USIIE;
-  USISRL = c;
+  while (0 == (USICTL1 & USIIFG)) {}
+  USICTL1 = USICTL1 - USIIFG;
+  USISRL = b;
   USICNT = 8;
   return;
 }
