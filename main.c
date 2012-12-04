@@ -4,12 +4,11 @@
 #include <msp430.h>
 
 #define	RED	0xFF0000
-#define ORANGE	0xFF7F00
-#define YELLOW	0xFFFF00
+#define ORANGE	0xFF2000
+#define YELLOW	0xFF7000
 #define	GREEN	0x00FF00
 #define BLUE	0x0000FF
-#define INDIGO	0x4B0082
-#define VIOLET	0x8F00FF
+#define INDIGO	0xFF0050
 #define WHITE   0xFFFFFF
 
 void send(unsigned long c);
@@ -36,18 +35,14 @@ USICTL0 = USIPE7 | USIPE6 | USIPE5 | USIOE         | USIMST;
 
 P1DIR = 255;
 
-//Push some data down the line
-send(RED);
-send(ORANGE);
-send(YELLOW);
-send(GREEN);
-send(BLUE);
-send(INDIGO);
-send(VIOLET);
-
 unsigned char i;
-for ( i = 0 ; i < 43 ; i++ ) {
-  send(WHITE);
+for ( i = 0 ; i < 50 ; i++ ) {
+  send(RED);
+  send(ORANGE);
+  send(YELLOW);
+  send(GREEN);
+  send(BLUE);
+  send(INDIGO);
 }
 
 P1OUT = 1;
