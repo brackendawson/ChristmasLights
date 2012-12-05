@@ -2,7 +2,7 @@ CC=msp430-gcc
 CFLAGS=-Os -Wall -g -mmcu=msp430x2012
 OPT=2
 
-NAME=lights1
+NAME=lights
 
 OBJS=main.o
 
