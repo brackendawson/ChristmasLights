@@ -1,6 +1,6 @@
 CC=msp430-gcc
-CFLAGS=-Os -Wall -g -mmcu=msp430x2012
-OPT=2
+CFLAGS=-Os -Wall -g -mmcu=msp430g2231
+OPT=s
 
 NAME=lights1
 
