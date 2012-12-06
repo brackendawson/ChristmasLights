@@ -24,7 +24,8 @@ WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
 USICTL0 = USISWRST;           // Stop spamming the USI
 
 /*setup clock, DCO to calibrated 1Mhz (apparently
-calibration data for 8Mhz is not programmed).*/
+calibration data for 8Mhz is not present on my
+chip :-( ).*/
 DCOCTL = CALDCO_1MHZ;
 BCSCTL1 = CALBC1_1MHZ;
 
@@ -45,7 +46,7 @@ WRITE_SR(GIE);
 TACCR0 = 0x9C40;
 
 unsigned char i;
-for ( i = 0 ; i < 50 ; i++ ) {
+for ( i = 0 ; i < 17 ; i++ ) {
   send(RED);
   send(ORANGE);
   send(YELLOW);
@@ -54,14 +55,16 @@ for ( i = 0 ; i < 50 ; i++ ) {
   send(INDIGO);
 }
 
-_BIS_SR(LPM4_bits);	//Go into Low power mode 4, main stops here
+/* Go into Low power mode , main stops here.
+CPU, MCLK are disabled, SMCLK, ACLK  and DCO
+are active. */
+_BIS_SR(LPM1_bits);
 
 }
 
 void send(unsigned char r, unsigned char g, unsigned char b) {
   //R
-  //wait for USIIFG to be clear
-  while (txing) {}
+  while (txing) {}  //wait for USIIFG to be clear
   USISRL = r;       //load the 8 "red" bits into the buffer
   txing = 1;        //Set the flag to stop thenext transmission
   USICNT = 8;       //tell the USI to clock 8 bits out
