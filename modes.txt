@@ -1,0 +1,74 @@
+There are all the modes I want to impliment.
+======
+Static
+======
+Piece of cake: ROYGBI
+
+==========
+Precession
+==========
+Every 0.5 seconds, move the LED 1 closer to the start:
+
+ROYGBI
+OYGBIR
+
+============
+Twinkle Star
+============
+Not using the standard buffer, turn white leds off and on individually.
+Will look slower on 50 LED model.
+
+======
+Candle
+======
+Simulate flickering candels, ooer.
+
+====
+Wave
+====
+Like precesion, but fade the LEDs up the tree, leave one blank.
+
+R.O.Y.G.B.I.
+fades quickly to
+.R.O.Y.G.B.I
+fades quickly and withoyt delay to
+I.R.O.Y.G.B.
+
+=========
+Chameleon
+=========
+Fade from one color to off to the next...
+RRR
+...
+OOO
+...
+YYY
+
+===========
+Upsie Downy
+===========
+Wizz a color up the tree, then the next color down the treee, will end up with pauses on 50 LED model.
+If it was a 3 LED string
+RRR
+ORR
+OOR
+OOO
+OOY
+OYY
+YYY
+GYY
+GGY
+GGG
+GGB
+GBB
+BBB
+IBB
+IIB
+III
+IIR
+IRR
+
+======
+Random
+======
+Quite quickly change a random LED to another colour.
