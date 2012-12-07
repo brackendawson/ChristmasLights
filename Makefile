@@ -1,17 +1,16 @@
 CC=msp430-gcc
-CFLAGS=-Os -Wall -g -mmcu=msp430g2231
-OPT=s
+CFLAGS=-O2 -Wall -g -mmcu=msp430g2231
 
 NAME=lights
 
 OBJS=main.o
 
 all: $(OBJS)
-	$(CC) $(CFLAGS) -O$(OPT) -o $(NAME).elf $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME).elf $(OBJS)
 	msp430-size $(NAME).elf
 
 %.o: %.c
-	$(CC) $(CFLAGS) -O$(OPT) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 .PHONY : clean
 clean:
