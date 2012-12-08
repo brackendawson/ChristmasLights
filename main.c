@@ -1,23 +1,23 @@
 #include <msp430.h>
 #include <signal.h>
+#include "colours.h"
 
-//colors
-#define	RED	0xFF,0x00,0x00
-#define ORANGE	0xFF,0x20,0x00
-#define YELLOW	0xFF,0x70,0x00
-#define	GREEN	0x00,0xFF,0x00
-#define BLUE	0x00,0x00,0xFF
-#define INDIGO	0xFF,0x00,0x50
-#define WHITE   0xFF,0xFF,0xFF
+//buffer for patterns to use, change its size if you need to
+unsigned int buffer[6];
 
-unsigned char buffer[] = {RED,ORANGE,YELLOW,GREEN,BLUE,INDIGO};
-unsigned char buffer_byte = 0;
-unsigned char buffer_loops_left = 0;
-#define BUFFER_LOOPS	17  // 100/6
+//stuff for USI
+#define NUM_LEDS	100	//Number of LEDs on the string
+unsigned char led_index;
+//USI states
+#define USI_IDLE	0	//USI not transmitting, USIIE is off
+#define USI_TXRED	1	//USI is/was transmitting RED sub-pixel for LED[index]
+#define USI_TXGREEN	2       //USI is/was transmitting GREEN sub-pixel for LED[index]
+#define USI_TXBLUE	3	//USI is/was transmitting BLUE sub-pixel for LED[index]
+unsigned char usi_state = USI_IDLE;
 
-unsigned char rotate = 0;
-
-void send(unsigned char r, unsigned char g, unsigned char b);
+//TODO: move this to the right place
+unsigned char pat_brt = 0;
+_Bool pat_dir = 1;
 
 int main(void) {
 
@@ -30,13 +30,17 @@ chip :-( ).*/
 DCOCTL = CALDCO_1MHZ;
 BCSCTL1 = CALBC1_1MHZ;
 
+//setup GPIO
+P1DIR = 255;
+P1OUT = 0;
+
 //setup USI
-//        edges     interrupt enabe (this row clear USIIFG)
-USICTL1 = USICKPH;// | USIIE;
+//        edges     interrupt still disabled, USIIFG cleared
+USICTL1 = USICKPH;
 //         SMCLK      no div
 USICKCTL = USISSEL_2;
 //        Output and clk             output enable   master    this reanables the USI
-USICTL0 = USIPE7 | USIPE6 | USIPE5 | USIOE         | USIMST;
+USICTL0 = USIPE7 | USIPE6 | USIPE5 | USIOE         | USIMST; //TODO trywithout USIPE7
 
 //setup timers
 //      SMCLK      /0     Up mode   interrupt en
@@ -53,61 +57,85 @@ _BIS_SR(LPM1_bits);
 
 }
 
-/*sends the first byte down the string. Interrupt
-driven code handles the rest. */
-void startsend(void) {
-  //enable USI interrput
-  USICTL1 = USICTL1 + USIIE;
-  //handle counters
-  buffer_loops_left = BUFFER_LOOPS;
-  //load the first byte
-  USISRL = buffer[buffer_byte = 0];
-  USICNT = 8;
+unsigned int get_led_val(unsigned char led) {
+  //TODO: put this in the right place
+  return buffer[led%6];
 }
 
-/* This function should be called 25 times per second. */
+/*The USI state machine function, can be
+called by code to get out of IDLE or by
+USIServerRoutine() when a sub-pixel
+transmission finishes. */
+void send(void) {
+  switch (usi_state) {
+    case USI_IDLE:
+      led_index = 0;
+      USISRL = get_led_val(led_index) >> 16;	//load red byte into SPI buffer
+      USICTL1 = USICTL1 + USIIE;	//enable interrupt on tx completion
+      USICNT = 8;			//Start send of 8 bits
+      usi_state = USI_TXRED;
+      return;
+    case USI_TXRED:
+      USISRL = get_led_val(led_index) >> 8;	//load green byte into SPI buffer
+      USICNT = 8;
+      usi_state = USI_TXGREEN;
+      return;
+    case USI_TXGREEN:
+      USISRL = get_led_val(led_index);	//load blue byte into SPI buffer
+      USICNT = 8;
+      usi_state = USI_TXBLUE;
+      return;
+    case USI_TXBLUE:
+      led_index++;
+      if (led_index >= NUM_LEDS) {
+        USICTL1 = USICTL1 - USIIE;	//disable interrupt
+        usi_state = USI_IDLE;
+        return;
+      } else {
+        USISRL = get_led_val(led_index) >> 16;    //load red byte into SPI buffer
+        USICNT = 8;                       //Start send of 8 bits
+        usi_state = USI_TXRED;
+        return;
+      }
+  }
+}
+
+/* This function shall be called 25 times per second. */
 interrupt (TIMERA1_VECTOR) TimerA1ServerRoutine(void) {
   TACTL = TACTL - TAIFG; //reset Timer A interrupt flag
-  
-  rotate++;
-  //rotate the array by one every 25th pass
-  if (12 == rotate) {
-    rotate = 0;
-    unsigned char storr = buffer[0];
-    unsigned char storg = buffer[1];
-    unsigned char storb = buffer[2];
-    unsigned char i;
-    for (i = 0 ; i < sizeof(buffer) - 3 ; i+=3) {
-      buffer[i] = buffer[i+3];
-      buffer[i+1] = buffer[i+4];
-      buffer[i+2] = buffer[i+5];    
-    }
-    buffer[sizeof(buffer) - 3] = storr;
-    buffer[sizeof(buffer) - 2] = storg;
-    buffer[sizeof(buffer) - 1] = storb;
+  if (usi_state != USI_IDLE) {
+    /*set red LED if this happens. It means the pattern function
+     is too slow. The string might also look wrong. */
+    P1OUT = 1;
   }
 
-  startsend();  //MUST BE AFTER ALL EDITS OF BUFFER!
+  //TODO: move this pattern function to the right place
+  buffer[0] = colour(RED,pat_brt);
+  buffer[1] = colour(ORANGE,pat_brt);
+  buffer[2] = colour(YELLOW,pat_brt);
+  buffer[3] = colour(GREEN,pat_brt);
+  buffer[4] = colour(BLUE,pat_brt);
+  buffer[5] = colour(INDIGO,pat_brt);
+  if (pat_dir) {
+    if (pat_brt >= 99) {
+      pat_dir = 0;
+    } else {
+      pat_brt++;
+    }
+  } else {
+    if (pat_brt <= 0) {
+      pat_dir = 1;
+    } else {
+      pat_brt--;
+    }
+  }
+  
+  send();  //MUST BE AFTER ALL EDITS OF BUFFER! MUST FINISH SENDING BEFORE NEXT CALL OF FUNCTION;
 }
 
-/* This function should be called when the USI has
+/* This function shall be called when the USI has
 finished tranmising the data in it's buffer. */
 interrupt (USI_VECTOR) USIServiceRoutine(void) {
   USICTL1 = USICTL1 - USIIFG;
-  //handle counters
-  if (buffer_byte >= sizeof(buffer) - 1) {
-    buffer_byte = 0;
-    buffer_loops_left--;
-    //end condition
-    if (0 == buffer_loops_left) {
-      //disable interrupt
-      USICTL1 = USICTL1 - USIIE;
-      return;
-    }
-  } else {
-    buffer_byte++;
-  }
-  //load a byte
-  USISRL = buffer[buffer_byte];
-  USICNT = 8;
+  send();
 }
