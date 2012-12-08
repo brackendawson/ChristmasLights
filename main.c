@@ -1,5 +1,4 @@
 #include <msp430.h>
-#include <signal.h>
 #include "colours.h"
 
 //buffer for patterns to use, change its size if you need to
@@ -23,7 +22,7 @@ unsigned char timera_div = 0;
 unsigned char pat_brt = 0;
 _Bool pat_dir = 1;
 
-int main(void) {
+void main(void) {
 
 WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
 USICTL0 = USISWRST;           // Stop spamming the USI
@@ -107,7 +106,7 @@ void send(void) {
 /* This function shall be called very roughly every
 1 milisecond. Using this every somethingth iteration
 gives 25 times per second. Calibrate with DCO_CAL_DIV*/
-interrupt (TIMERA1_VECTOR) TimerA1ServerRoutine(void) {
+__attribute__((interrupt(TIMERA1_VECTOR))) void TimerA1ServerRoutine(void) {
   TACTL = TACTL - TAIFG; //reset Timer A interrupt flag
   if (timera_div++ < DCO_CAL_DIV) {
     return;
@@ -146,7 +145,7 @@ interrupt (TIMERA1_VECTOR) TimerA1ServerRoutine(void) {
 
 /* This function shall be called when the USI has
 finished tranmising the data in it's buffer. */
-interrupt (USI_VECTOR) USIServiceRoutine(void) {
+__attribute__((interrupt(USI_VECTOR))) void USIServiceRoutine(void) {
   USICTL1 = USICTL1 - USIIFG;
   send();
 }
