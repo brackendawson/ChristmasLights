@@ -4,13 +4,12 @@ CFLAGS=-O2 -Wall -g -mmcu=msp430g2231
 NAME=lights
 
 OBJS=main.o
-INCLUDES=colours.h
 
 all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME).elf $(OBJS)
 	msp430-size $(NAME).elf
 
-%.o: %.c colours.h
+%.o: %.c *.h
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY : clean
