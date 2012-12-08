@@ -49,29 +49,47 @@ brightness in the range of 0 to SUBP_TABLE_SIZE where 0 is off and SUPB_TABLE_SI
 is fully bright, the ramp is liner if the tables were generated with a good power.
 It returns an nsigned long contining a 24-bit RGB value from LSB to bit 23, bits
 24 to 31 are reserved. */
-unsigned int colour(unsigned char colour, unsigned char brightness) {
+unsigned long colour(unsigned char colour, unsigned char brightness) {
+  unsigned long value = 0;
   switch (colour) {
-    case WHITE:
-      return((SUBP_255[brightness] << 16) + (SUBP_255[brightness] << 8) + SUBP_255[brightness]);
     case BLACK:
-      return(0);
+      break;
+    case WHITE:
+      value = SUBP_255[brightness];
+      value = value << 8;
+      value = value | SUBP_255[brightness];
+      value = value << 8;
+      value = value | SUBP_255[brightness];
+      break;
     case RED:
-      return(SUBP_255[brightness]<<16);
+      value = SUBP_255[brightness];
+      value = value << 16;
+      break;
     case ORANGE:
-      return((SUBP_255[brightness]<<16) + (SUBP_32[brightness]<<8));
+      value = SUBP_255[brightness];
+      value = value << 8;
+      value = value | SUBP_32[brightness];
+      value = value << 8;
+      break;
     case YELLOW:
-      return((SUBP_255[brightness]<<16) + (SUBP_112[brightness]<<8));
+      value = SUBP_255[brightness];
+      value = value << 8;
+      value = value | SUBP_112[brightness];
+      value = value << 8;
+      break;
     case GREEN:
-      return(SUBP_255[brightness]<<8);
+      value = SUBP_255[brightness];
+      value = value << 8;
+      break;
     case BLUE:
-      return(SUBP_255[brightness]);
+      value = SUBP_255[brightness];
+      break;
     case INDIGO:
-      return((SUBP_255[brightness]<<16) + (SUBP_80[brightness]));
+      value = SUBP_255[brightness];
+      value = value << 16;
+      value = value | SUBP_80[brightness];
+      break;
   }
+  return(value);
 }
-
-
-
-
-
 

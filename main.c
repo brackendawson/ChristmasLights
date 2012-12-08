@@ -3,7 +3,7 @@
 #include "colours.h"
 
 //buffer for patterns to use, change its size if you need to
-unsigned int buffer[6];
+unsigned long buffer[6];
 
 //stuff for USI
 #define NUM_LEDS	100	//Number of LEDs on the string
@@ -61,7 +61,7 @@ _BIS_SR(LPM1_bits);
 
 }
 
-unsigned int get_led_val(unsigned char led) {
+unsigned long get_led_val(unsigned char led) {
   //TODO: put this in the right place
   return buffer[led%6];
 }
