@@ -10,6 +10,7 @@ you are uing Linux and mspdebug.
 It is extensible, you can add your own patterns fairly
 easily.
 
-fade_table.pl	Perl script to make lookup tables used to define a sub-pixel in a fadable colour.
-HOW_TO_DEBUG	I can never remember how to invoke ddd.
-modes.txt	Loose description of patterns I want to make.
+fade_table.pl		Perl script to make lookup tables used to define a sub-pixel in a fadable colour.
+HOW_TO_DEBUG		I can never remember how to invoke ddd.
+modes.txt		Loose description of patterns I want to make.
+USI_State_Machine.odt	Documentation of the USI state machine used for trasmission.
