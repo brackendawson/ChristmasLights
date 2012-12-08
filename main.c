@@ -15,6 +15,10 @@ unsigned char led_index;
 #define USI_TXBLUE	3	//USI is/was transmitting BLUE sub-pixel for LED[index]
 unsigned char usi_state = USI_IDLE;
 
+//Timer devider
+unsigned char timera_div = 0;
+#define DCO_CAL_DIV	16
+
 //TODO: move this to the right place
 unsigned char pat_brt = 0;
 _Bool pat_dir = 1;
@@ -24,11 +28,11 @@ int main(void) {
 WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
 USICTL0 = USISWRST;           // Stop spamming the USI
 
-/*setup clock, DCO to calibrated 1Mhz (apparently
-calibration data for 8Mhz is not present on my
-chip :-( ).*/
-DCOCTL = CALDCO_1MHZ;
-BCSCTL1 = CALBC1_1MHZ;
+/*setup clock, DCO to max DCO, about 25MHz */
+//       DCOx         MODx
+DCOCTL = 0b11100000 | 0b00011111;
+//        no xtal   RSELx
+BCSCTL1 = XT2OFF | 0b00001111;
 
 //setup GPIO
 P1DIR = 255;
@@ -38,17 +42,17 @@ P1OUT = 0;
 //        edges     interrupt still disabled, USIIFG cleared
 USICTL1 = USICKPH;
 //         SMCLK      no div
-USICKCTL = USISSEL_2;
+USICKCTL = USISSEL_2 | USIDIV_3;
 //        Output and clk             output enable   master    this reanables the USI
 USICTL0 = USIPE7 | USIPE6 | USIPE5 | USIOE         | USIMST; //TODO trywithout USIPE7
 
 //setup timers
-//      SMCLK      /0     Up mode   interrupt en
-TACTL = TASSEL_2 | ID_0 | MC_1    | TAIE;
+//      SMCLK      /8     Up mode   interrupt enabled
+TACTL = TASSEL_2 | ID_3 | MC_1    | TAIE;
 //enable global interrupts
 WRITE_SR(GIE);
-// starts timer, going for 40ms 
-TACCR0 = 0x9C40;
+// starts timer, aiming for 250us 
+TACCR0 = 0x186A;
 
 /* Go into Low power mode , main stops here.
 CPU, MCLK are disabled, SMCLK, ACLK  and DCO
@@ -100,9 +104,16 @@ void send(void) {
   }
 }
 
-/* This function shall be called 25 times per second. */
+/* This function shall be called very roughly every
+1 milisecond. Using this every somethingth iteration
+gives 25 times per second. Calibrate with DCO_CAL_DIV*/
 interrupt (TIMERA1_VECTOR) TimerA1ServerRoutine(void) {
   TACTL = TACTL - TAIFG; //reset Timer A interrupt flag
+  if (timera_div++ < DCO_CAL_DIV) {
+    return;
+  }
+  timera_div = 0;  
+
   if (usi_state != USI_IDLE) {
     /*set red LED if this happens. It means the pattern function
      is too slow. The string might also look wrong. */
