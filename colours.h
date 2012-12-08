@@ -52,21 +52,21 @@ It returns an nsigned long contining a 24-bit RGB value from LSB to bit 23, bits
 unsigned int colour(unsigned char colour, unsigned char brightness) {
   switch (colour) {
     case WHITE:
-      return(((unsigned int) SUBP_255[brightness]<<16) + ((unsigned int) SUBP_255[brightness]<<8) + SUBP_255[brightness]);
+      return((SUBP_255[brightness] << 16) + (SUBP_255[brightness] << 8) + SUBP_255[brightness]);
     case BLACK:
       return(0);
     case RED:
-      return((unsigned int) SUBP_255[brightness]<<16);
+      return(SUBP_255[brightness]<<16);
     case ORANGE:
-      return(((unsigned int) SUBP_255[brightness]<<16) + (unsigned int) (SUBP_32[brightness]<<8));
+      return((SUBP_255[brightness]<<16) + (SUBP_32[brightness]<<8));
     case YELLOW:
-      return(((unsigned int) SUBP_255[brightness]<<16) + (unsigned int) (SUBP_112[brightness]<<8));
+      return((SUBP_255[brightness]<<16) + (SUBP_112[brightness]<<8));
     case GREEN:
-      return((unsigned int) SUBP_255[brightness]<<8);
+      return(SUBP_255[brightness]<<8);
     case BLUE:
       return(SUBP_255[brightness]);
     case INDIGO:
-      return(((unsigned int) SUBP_255[brightness]<<16) + (SUBP_80[brightness]));
+      return((SUBP_255[brightness]<<16) + (SUBP_80[brightness]));
   }
 }
 
