@@ -1,0 +1,15 @@
+This is a C program compilable with the mspgcc toolchain
+for a TI MSP430 microcontroller (like MSP430 launchpad).
+It drives a WS2801 based string of RGB LEDs (or 2
+strings, or more...) to create lights for a christmass
+tree.
+
+Compile with "make", or "make prog" to program too if
+you are uing Linux and mspdebug.
+
+It is extensible, you can add your own patterns fairly
+easily.
+
+fade_table.pl	Perl script to make lookup tables used to define a sub-pixel in a fadable colour.
+HOW_TO_DEBUG	I can never remember how to invoke ddd.
+modes.txt	Loose description of patterns I want to make.
