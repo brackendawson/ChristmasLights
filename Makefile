@@ -9,7 +9,7 @@ all: $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME).elf $(OBJS)
 	msp430-size $(NAME).elf
 
-%.o: %.c *.h
+%.o: %.c *.h patterns/*.h
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY : clean
