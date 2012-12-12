@@ -3,7 +3,7 @@ need to. Be carefull if you make it smaller. */
 unsigned long buffer[6];
 
 //Patterns to include
-#include "fadeall.h"
+#include "patterns/fadeall.h"
 
 void init(void) {
   return;
