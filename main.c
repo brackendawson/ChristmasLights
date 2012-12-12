@@ -14,7 +14,7 @@ unsigned char usi_state = USI_IDLE;
 
 //Timer devider
 unsigned char timera_div = 0;
-#define DCO_CAL_DIV	16
+//#define DCO_CAL_DIV	16
 
 void main(void) {
 
