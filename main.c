@@ -36,8 +36,8 @@ P1OUT = 0;
 USICTL1 = USICKPH;
 //         SMCLK      no div
 USICKCTL = USISSEL_2 | USIDIV_3;
-//        Output and clk             output enable   master    this reanables the USI
-USICTL0 = USIPE7 | USIPE6 | USIPE5 | USIOE         | USIMST; //TODO trywithout USIPE7
+//        Output and clk    output enable   master    this reanables the USI by clearning USISWRST
+USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;
 
 //setup timers
 //      SMCLK      /8     Up mode   interrupt enabled
@@ -108,7 +108,7 @@ __attribute__((interrupt(TIMERA1_VECTOR))) void TimerA1ServerRoutine(void) {
     P1OUT = 1;
   }
 
-  frame();
+  frame();   //triggers the current pattern to generate the next frame
 
   send();  //MUST BE AFTER ALL EDITS OF BUFFER! MUST FINISH SENDING BEFORE NEXT CALL OF FUNCTION;
 }
