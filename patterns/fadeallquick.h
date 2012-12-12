@@ -1,12 +1,12 @@
 //Constants for this pattern
-unsigned char fadeall_pat_brt = 0;
-_Bool fadeall_pat_dir = 1;
+unsigned char fadeallquick_pat_brt = 0;
+_Bool fadeallquick_pat_dir = 1;
 
 //functions for this pattern
 
 /* init function for this pattern, called when beginning
 this pattern */
-void fadeall_init(void) {
+void fadeallquick_init(void) {
   return;
 }
 
@@ -14,27 +14,27 @@ void fadeall_init(void) {
 second while displaying this pattern. It should be fairly
 efficient, if it takes too long P1.0 output will be set
 to 1 (red LED on launchpad). */
-void fadeall_frame(void) {
-  buffer[0] = colour(RED,fadeall_pat_brt);	/* colour(unsigned char color, unsigned char brightness)
+void fadeallquick_frame(void) {
+  buffer[0] = colour(RED,fadeallquick_pat_brt);	/* colour(unsigned char color, unsigned char brightness)
 					is a helper function that returns the 24-bit colour value
 					for any colour defined in colours.h and a brightess from
 					0 (off) to 99 (full brighness). */
-  buffer[1] = colour(ORANGE,fadeall_pat_brt);
-  buffer[2] = colour(YELLOW,fadeall_pat_brt);
-  buffer[3] = colour(GREEN,fadeall_pat_brt);
-  buffer[4] = colour(BLUE,fadeall_pat_brt);
-  buffer[5] = colour(INDIGO,fadeall_pat_brt);
-  if (fadeall_pat_dir) {
-    if (fadeall_pat_brt >= 99) {
-      fadeall_pat_dir = 0;
+  buffer[1] = colour(ORANGE,fadeallquick_pat_brt);
+  buffer[2] = colour(YELLOW,fadeallquick_pat_brt);
+  buffer[3] = colour(GREEN,fadeallquick_pat_brt);
+  buffer[4] = colour(BLUE,fadeallquick_pat_brt);
+  buffer[5] = colour(INDIGO,fadeallquick_pat_brt);
+  if (fadeallquick_pat_dir) {
+    if (fadeallquick_pat_brt >= 99) {
+      fadeallquick_pat_dir = 0;
     } else {
-      fadeall_pat_brt++;
+      fadeallquick_pat_brt+=9;
     }
   } else {
-    if (fadeall_pat_brt <= 0) {
-      fadeall_pat_dir = 1;
+    if (fadeallquick_pat_brt <= 0) {
+      fadeallquick_pat_dir = 1;
     } else {
-      fadeall_pat_brt--;
+      fadeallquick_pat_brt-=9;
     }
   }
   return;
@@ -47,7 +47,7 @@ Will be passed and unsigned char between 0 and 99, must
 return the 24-bit colour value for the correspinding
 LED as the right three bytes of an unsigned long. The
 left byte is reserverved and should be returned zero. */
-unsigned long fadeall_getled(unsigned char led) {
+unsigned long fadeallquick_getled(unsigned char led) {
   //TODO: put this in the right place
   return buffer[led%6];		/* buffer is an array of unsigned long
 				which you can use however you like, make

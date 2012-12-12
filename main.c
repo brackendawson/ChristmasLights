@@ -13,8 +13,10 @@ unsigned char led_index;
 unsigned char usi_state = USI_IDLE;
 
 //Timer devider
-unsigned char timera_div = 0;
-//#define DCO_CAL_DIV	16
+unsigned char timera_div = 0; //to DCO_CAL_DIV
+
+//Pattern cycle divider
+unsigned int cycle_div = 0; //to CYCLE_TIME
 
 void main(void) {
 
@@ -28,7 +30,10 @@ DCOCTL = 0b11100000 | 0b00011111;
 BCSCTL1 = XT2OFF | 0b00001111;
 
 //setup GPIO
-P1DIR = 255;
+P1DIR = 0b11110111;  //S2 (P1.3 is input)
+P1IFG = 0;           //Clear interrupts
+P1IES = 255;         //interrupt on falling edge
+P1IE  = 0b00001000;  //Intettupt only for S2 (P1.3)
 P1OUT = 0;
 
 //setup USI
@@ -41,17 +46,62 @@ USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;
 
 //setup timers
 //      SMCLK      /8     Up mode   interrupt enabled
-TACTL = TASSEL_2 | ID_3 | MC_1    | TAIE;
+TA0CTL = TASSEL_2 | ID_3 | MC_1    | TAIE;
 //enable global interrupts
 WRITE_SR(GIE);
 // starts timer, aiming for 250us 
-TACCR0 = 0x186A;
+TA0CCR0 = 0x186A;
+
+init(); //initialise default pattern
 
 /* Go into Low power mode , main stops here.
 CPU, MCLK are disabled, SMCLK, ACLK  and DCO
 are active. */
 _BIS_SR(LPM1_bits);
 
+}
+
+/* The function to move the pattens up 1 and enable/disable
+cycle mode */
+void rotate(void) {
+  //TODO there is a race condition here, disable timera init while in this function
+  if (cycle) {
+    /* we are in cycle mode, stop that
+    and go to static. */
+    cycle = 0;
+    current_pattern = 0;
+    init();
+  } else {
+    /* we are not in cycle mode,
+    incriment mode or enable cycle
+    from mode 1. */
+    if (NUM_PATTERNS <= current_pattern) {
+      /* we are at the last pattern, enable
+      cycle from pattern 1. */
+      cycle = 1;
+      current_pattern = 1;
+      init();
+    } else {
+      current_pattern++;
+      init();
+    }
+  }
+  return;
+}
+
+/* The function to cycle patterns in cycle mode */
+void cyclepattern(void) {
+  if (!cycle) {
+    return;
+  }
+  if (NUM_PATTERNS <= current_pattern) {
+    current_pattern = 1;
+    init();
+  } else {
+    current_pattern++;
+    init();
+  }
+  return;
 }
 
 /*The USI state machine function, can be
@@ -95,8 +145,8 @@ void send(void) {
 /* This function shall be called very roughly every
 1 milisecond. Using this every somethingth iteration
 gives 25 times per second. Calibrate with DCO_CAL_DIV*/
-__attribute__((interrupt(TIMERA1_VECTOR))) void TimerA1ServerRoutine(void) {
-  TACTL = TACTL - TAIFG; //reset Timer A interrupt flag
+__attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
+  TA0CTL = TA0CTL - TAIFG; //reset Timer A interrupt flag
   if (timera_div++ < DCO_CAL_DIV) {
     return;
   }
@@ -106,6 +156,12 @@ __attribute__((interrupt(TIMERA1_VECTOR))) void TimerA1ServerRoutine(void) {
     /*set red LED if this happens. It means the pattern function
      is too slow. The string might also look wrong. */
     P1OUT = 1;
+  }
+
+  if (CYCLE_TIME <= cycle_div++) { 
+    cycle_div = 0;
+    //time to move the pattern up if we are cycling
+    cyclepattern();
   }
 
   frame();   //triggers the current pattern to generate the next frame
@@ -118,4 +174,9 @@ finished tranmising the data in it's buffer. */
 __attribute__((interrupt(USI_VECTOR))) void USIServiceRoutine(void) {
   USICTL1 = USICTL1 - USIIFG;
   send();
+}
+
+__attribute__((interrupt(PORT1_VECTOR))) void Port1ServiceRoutine(void) {
+  P1IFG = 0;
+  rotate();
 }
