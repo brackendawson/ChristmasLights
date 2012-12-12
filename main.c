@@ -1,8 +1,6 @@
 #include <msp430.h>
 #include "colours.h"
-
-//buffer for patterns to use, change its size if you need to
-unsigned long buffer[6];
+#include "configuration.h"
 
 //stuff for USI
 #define NUM_LEDS	100	//Number of LEDs on the string
@@ -17,10 +15,6 @@ unsigned char usi_state = USI_IDLE;
 //Timer devider
 unsigned char timera_div = 0;
 #define DCO_CAL_DIV	16
-
-//TODO: move this to the right place
-unsigned char pat_brt = 0;
-_Bool pat_dir = 1;
 
 void main(void) {
 
@@ -60,11 +54,6 @@ _BIS_SR(LPM1_bits);
 
 }
 
-unsigned long get_led_val(unsigned char led) {
-  //TODO: put this in the right place
-  return buffer[led%6];
-}
-
 /*The USI state machine function, can be
 called by code to get out of IDLE or by
 USIServerRoutine() when a sub-pixel
@@ -73,18 +62,18 @@ void send(void) {
   switch (usi_state) {
     case USI_IDLE:
       led_index = 0;
-      USISRL = get_led_val(led_index) >> 16;	//load red byte into SPI buffer
+      USISRL = getled(led_index) >> 16;	//load red byte into SPI buffer
       USICTL1 = USICTL1 + USIIE;	//enable interrupt on tx completion
       USICNT = 8;			//Start send of 8 bits
       usi_state = USI_TXRED;
       return;
     case USI_TXRED:
-      USISRL = get_led_val(led_index) >> 8;	//load green byte into SPI buffer
+      USISRL = getled(led_index) >> 8;	//load green byte into SPI buffer
       USICNT = 8;
       usi_state = USI_TXGREEN;
       return;
     case USI_TXGREEN:
-      USISRL = get_led_val(led_index);	//load blue byte into SPI buffer
+      USISRL = getled(led_index);	//load blue byte into SPI buffer
       USICNT = 8;
       usi_state = USI_TXBLUE;
       return;
@@ -95,7 +84,7 @@ void send(void) {
         usi_state = USI_IDLE;
         return;
       } else {
-        USISRL = get_led_val(led_index) >> 16;    //load red byte into SPI buffer
+        USISRL = getled(led_index) >> 16;    //load red byte into SPI buffer
         USICNT = 8;                       //Start send of 8 bits
         usi_state = USI_TXRED;
         return;
@@ -119,27 +108,8 @@ __attribute__((interrupt(TIMERA1_VECTOR))) void TimerA1ServerRoutine(void) {
     P1OUT = 1;
   }
 
-  //TODO: move this pattern function to the right place
-  buffer[0] = colour(RED,pat_brt);
-  buffer[1] = colour(ORANGE,pat_brt);
-  buffer[2] = colour(YELLOW,pat_brt);
-  buffer[3] = colour(GREEN,pat_brt);
-  buffer[4] = colour(BLUE,pat_brt);
-  buffer[5] = colour(INDIGO,pat_brt);
-  if (pat_dir) {
-    if (pat_brt >= 99) {
-      pat_dir = 0;
-    } else {
-      pat_brt++;
-    }
-  } else {
-    if (pat_brt <= 0) {
-      pat_dir = 1;
-    } else {
-      pat_brt--;
-    }
-  }
-  
+  frame();
+
   send();  //MUST BE AFTER ALL EDITS OF BUFFER! MUST FINISH SENDING BEFORE NEXT CALL OF FUNCTION;
 }
 
