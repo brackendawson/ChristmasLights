@@ -54,5 +54,5 @@ unsigned long getled(unsigned char brightness) {
     case 2:
       return run_getled(brightness);
   }
-  return;
+  return(0);
 }
