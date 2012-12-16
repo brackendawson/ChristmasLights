@@ -10,11 +10,11 @@ come with larger than a 1MHz calibration. */
 //Patterns to include
 #include "patterns/static.h"  //removing static breaks cycle logic
 #include "patterns/fadeall.h"
-#include "patterns/fadeallquick.h"
+#include "patterns/run.h"
 
 #define NUM_PATTERNS 2 //not including static
 unsigned char current_pattern = 0;	//default pattern, 0 is static
-#define CYCLE_TIME 10/0.04		//frames to display a pattern for (seconds/0.04 MUST BE INTEGER!)
+#define CYCLE_TIME 60/0.04		//frames to display a pattern for (seconds/0.04 MUST BE INTEGER!)
 _Bool cycle = 0;			//0 means default to not cycling
 
 
@@ -28,7 +28,7 @@ void init(void) {
       fadeall_init();
       break;
     case 2:
-      fadeallquick_init();
+      run_init();
       break;
   }
   return;
@@ -43,7 +43,7 @@ void frame(void) {
       fadeall_frame();
       break;
     case 2:
-      fadeallquick_frame();
+      run_frame();
       break;
   }
   return;
@@ -56,6 +56,6 @@ unsigned long getled(unsigned char brightness) {
     case 1:
       return fadeall_getled(brightness);
     case 2:
-      return fadeallquick_getled(brightness);
+      return run_getled(brightness);
   }
 }
