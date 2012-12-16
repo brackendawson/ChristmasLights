@@ -1,10 +1,12 @@
 //Constants for this pattern
-  unsigned char run_index = 0;
-  unsigned char run_colour = RED;
+  unsigned char run_index;
+  unsigned char run_colour;
 
 //functions for this pattern
 
 void run_init(void) {
+  run_index = 0;
+  run_colour = RED;
   return;
 }
 

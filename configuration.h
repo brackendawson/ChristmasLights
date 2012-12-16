@@ -1,7 +1,3 @@
-/* Array for all patterns to use, change its size if you
-need to. Be carefull if you make it smaller. */
-unsigned long buffer[6];
-
 /* Timer calibration, if the patterns are too fast, make
 this larger. Not all MSP430s were created equal and few
 come with larger than a 1MHz calibration. */
@@ -58,4 +54,5 @@ unsigned long getled(unsigned char brightness) {
     case 2:
       return run_getled(brightness);
   }
+  return;
 }
