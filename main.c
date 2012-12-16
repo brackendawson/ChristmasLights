@@ -64,7 +64,10 @@ _BIS_SR(LPM1_bits);
 /* The function to move the pattens up 1 and enable/disable
 cycle mode */
 void rotate(void) {
-  //TODO there is a race condition here, disable timera init while in this function
+  /* Disable Timer interrupt for duration
+  of this function so we don't get a
+  frame before the pattern is ready. */
+  TA0CTL = TA0CTL - TAIE;
   if (cycle) {
     /* we are in cycle mode, stop that
     and go to static. */
@@ -86,6 +89,8 @@ void rotate(void) {
       init();
     }
   }
+  // Timer interrupt back on
+  TA0CTL = TA0CTL + TAIE;
   return;
 }
 
