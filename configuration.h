@@ -7,8 +7,9 @@ come with larger than a 1MHz calibration. */
 #include "patterns/static.h"  //removing static breaks cycle logic
 #include "patterns/fadeall.h"
 #include "patterns/run.h"
+#include "patterns/chameleon.h"
 
-#define NUM_PATTERNS 2 //not including static
+#define NUM_PATTERNS 3 //not including static
 unsigned char current_pattern = 0;	//default pattern, 0 is static
 #define CYCLE_TIME 60/0.04		//frames to display a pattern for (seconds/0.04 MUST BE INTEGER!)
 _Bool cycle = 0;			//0 means default to not cycling
@@ -26,6 +27,9 @@ void init(void) {
     case 2:
       run_init();
       break;
+    case 3:
+      chameleon_init();
+      break;
   }
   return;
 }
@@ -41,6 +45,9 @@ void frame(void) {
     case 2:
       run_frame();
       break;
+    case 3:
+      chameleon_frame();
+      break;
   }
   return;
 }
@@ -53,6 +60,8 @@ unsigned long getled(unsigned char brightness) {
       return fadeall_getled(brightness);
     case 2:
       return run_getled(brightness);
+    case 3:
+      return chameleon_getled(brightness);
   }
   return(0);
 }
