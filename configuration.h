@@ -24,7 +24,7 @@ check. */
 
 #define NUM_PATTERNS 5			//not including static
 unsigned char current_pattern = 0;	//default pattern, 0 is static
-#define CYCLE_TIME 60/0.04		//frames to display a pattern for in cycle mode, must be integer, for convinience say "seconds/0.04".
+#define CYCLE_TIME 300/0.04		//frames to display a pattern for in cycle mode, must be integer, for convinience say "seconds/0.04".
 _Bool cycle = 0;			//0 means default to not cycling, 1 means default to cycling from the default pattern
 
 
