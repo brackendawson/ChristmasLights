@@ -1,3 +1,7 @@
+/* This header defines all user configurable stuff.
+Of course you're free to change anything outside
+this file too... :-) */
+
 /* Number of LEDs in the string, up to 255 */
 #define NUM_LEDS	50
 
@@ -10,7 +14,7 @@ check. */
 
 //Patterns to include
 #include "patterns/static.h"	//removing static breaks cycle mode logic
-#include "patterns/fadeall.h"
+#include "patterns/fade.h"
 #include "patterns/run.h"
 #include "patterns/chameleon.h"
 #include "patterns/wave.h"
@@ -28,7 +32,7 @@ void init(void) {
       static_init();
       break;
     case 1:
-      fadeall_init();
+      fade_init();
       break;
     case 2:
       run_init();
@@ -49,7 +53,7 @@ void frame(void) {
       static_frame();
       break;
     case 1:
-      fadeall_frame();
+      fade_frame();
       break;
     case 2:
       run_frame();
@@ -69,7 +73,7 @@ unsigned long getled(unsigned char brightness) {
     case 0:
       return static_getled(brightness);
     case 1:
-      return fadeall_getled(brightness);
+      return fade_getled(brightness);
     case 2:
       return run_getled(brightness);
     case 3:

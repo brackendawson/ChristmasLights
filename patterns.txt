@@ -1,6 +1,7 @@
-There are all the modes I want to impliment.
+These are some of the modes I might impliment, it's just a scratchpad.
+
 ======
-Static
+Static done
 ======
 Piece of cake: ROYGBI
 
@@ -24,7 +25,7 @@ Candle
 Simulate flickering candels, ooer.
 
 ====
-Wave
+Wave done
 ====
 Like precesion, but fade the LEDs up the tree, leave one blank.
 
@@ -35,7 +36,7 @@ fades quickly and withoyt delay to
 I.R.O.Y.G.B.
 
 =========
-Chameleon
+Chameleon done
 =========
 Fade from one color to off to the next...
 RRR
@@ -72,3 +73,13 @@ IRR
 Random
 ======
 Quite quickly change a random LED to another colour.
+
+====
+fade done
+====
+Static but fading up and down.
+
+===
+run done
+===
+Run a RED light from 0 to the top, then orange, and so on...

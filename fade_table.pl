@@ -4,7 +4,7 @@
 # for sub-pixel values that fade gracefully.
 #
 # Invoke as ./fade_table.pl 100 255 2.5
-# Where 100 is the number of line in the table, 255
+# Where 100 is the number of lines in the table, 255
 # is the maximum value and 2.5 is the power (larger
 # number make tables more sensitibve at dim values).
 
