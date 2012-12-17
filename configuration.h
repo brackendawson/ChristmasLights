@@ -2,6 +2,8 @@
 Of course you're free to change anything outside
 this file too... :-) */
 
+/* Remember to set your MCU in the Makefile */
+
 /* Number of LEDs in the string, up to 255 */
 #define NUM_LEDS	50
 
