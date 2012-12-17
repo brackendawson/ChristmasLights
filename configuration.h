@@ -8,8 +8,9 @@ come with larger than a 1MHz calibration. */
 #include "patterns/fadeall.h"
 #include "patterns/run.h"
 #include "patterns/chameleon.h"
+#include "patterns/wave.h"
 
-#define NUM_PATTERNS 3 //not including static
+#define NUM_PATTERNS 4 //not including static
 unsigned char current_pattern = 0;	//default pattern, 0 is static
 #define CYCLE_TIME 60/0.04		//frames to display a pattern for (seconds/0.04 MUST BE INTEGER!)
 _Bool cycle = 0;			//0 means default to not cycling
@@ -30,6 +31,9 @@ void init(void) {
     case 3:
       chameleon_init();
       break;
+    case 4:
+      wave_init();
+      break;
   }
   return;
 }
@@ -48,6 +52,9 @@ void frame(void) {
     case 3:
       chameleon_frame();
       break;
+    case 4:
+      wave_frame();
+      break;
   }
   return;
 }
@@ -62,6 +69,8 @@ unsigned long getled(unsigned char brightness) {
       return run_getled(brightness);
     case 3:
       return chameleon_getled(brightness);
+    case 4:
+      return wave_getled(brightness);
   }
   return(0);
 }
