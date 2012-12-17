@@ -5,6 +5,7 @@ unsigned char chameleon_colour;
 
 //functions for this pattern
 
+//init function
 void chameleon_init(void) {
   chameleon_dir = 1;	//up
   chameleon_colour = RED;
@@ -12,6 +13,7 @@ void chameleon_init(void) {
   return;
 }
 
+//frame function
 void chameleon_frame(void) {
   if (chameleon_dir) {
     chameleon_brightness++;
@@ -31,6 +33,7 @@ void chameleon_frame(void) {
   return;
 }
 
+//getled function
 unsigned long chameleon_getled(unsigned char led) {
   unsigned long col = colour(chameleon_colour, chameleon_brightness);
   return(col);

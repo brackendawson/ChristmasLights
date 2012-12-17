@@ -3,7 +3,6 @@
 #include "configuration.h"
 
 //stuff for USI
-#define NUM_LEDS	100	//Number of LEDs on the string
 unsigned char led_index;
 //USI states
 #define USI_IDLE	0	//USI not transmitting, USIIE is off
@@ -21,12 +20,12 @@ unsigned int cycle_div = 0; //to CYCLE_TIME
 void main(void) {
 
 WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
-USICTL0 = USISWRST;           // Stop spamming the USI
+USICTL0 = USISWRST;           // Stop spamming the USI during init
 
 /*setup clock, DCO to max DCO, about 25MHz */
 //       DCOx         MODx
 DCOCTL = 0b11100000 | 0b00011111;
-//        no xtal   RSELx
+//        no xtal  RSELx
 BCSCTL1 = XT2OFF | 0b00001111;
 
 //setup GPIO
@@ -37,7 +36,7 @@ P1IE  = 0b00001000;  //Intettupt only for S2 (P1.3)
 P1OUT = 0;
 
 //setup USI
-//        edges     interrupt still disabled, USIIFG cleared
+//        edges     interrupt disabled and USIIFG cleared by this
 USICTL1 = USICKPH;
 //         SMCLK      no div
 USICKCTL = USISSEL_2 | USIDIV_3;
@@ -45,14 +44,16 @@ USICKCTL = USISSEL_2 | USIDIV_3;
 USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;
 
 //setup timers
-//      SMCLK      /8     Up mode   interrupt enabled
+//       SMCLK      /8     Up mode   interrupt enabled
 TA0CTL = TASSEL_2 | ID_3 | MC_1    | TAIE;
-//enable global interrupts
+
+//initialise default pattern, defined in configuration.h
+init();
+
+//enable maskable interrupts globaly
 WRITE_SR(GIE);
 // starts timer, aiming for 250us 
 TA0CCR0 = 0x186A;
-
-init(); //initialise default pattern
 
 /* Go into Low power mode , main stops here.
 CPU, MCLK are disabled, SMCLK, ACLK  and DCO
@@ -62,12 +63,13 @@ _BIS_SR(LPM1_bits);
 }
 
 /* The function to move the pattens up 1 and enable/disable
-cycle mode */
+cycle mode at the end. */
 void rotate(void) {
   /* Disable Timer interrupt for duration
   of this function so we don't get a
   frame before the pattern is ready. */
   TA0CTL = TA0CTL - TAIE;
+
   if (cycle) {
     /* we are in cycle mode, stop that
     and go to static. */
@@ -89,6 +91,7 @@ void rotate(void) {
       init();
     }
   }
+
   // Timer interrupt back on
   TA0CTL = TA0CTL + TAIE;
   return;
@@ -110,9 +113,10 @@ void cyclepattern(void) {
 }
 
 /*The USI state machine function, can be
-called by code to get out of IDLE or by
-USIServerRoutine() when a sub-pixel
-transmission finishes. */
+called by code to get out of IDLE and start
+a transmission, or by USIServerRoutine()
+when a sub-pixel transmission finishes and
+it's time for another 8 bytes. */
 void send(void) {
   switch (usi_state) {
     case USI_IDLE:
@@ -139,8 +143,8 @@ void send(void) {
         usi_state = USI_IDLE;
         return;
       } else {
-        USISRL = getled(led_index) >> 16;    //load red byte into SPI buffer
-        USICNT = 8;                       //Start send of 8 bits
+        USISRL = getled(led_index) >> 16;	//load red byte into SPI buffer
+        USICNT = 8;				//Start send of 8 bits
         usi_state = USI_TXRED;
         return;
       }
@@ -171,7 +175,7 @@ __attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
 
   frame();   //triggers the current pattern to generate the next frame
 
-  send();  //MUST BE AFTER ALL EDITS OF BUFFER! MUST FINISH SENDING BEFORE NEXT CALL OF FUNCTION;
+  send();  //MUST BE AFTER FRAME FUNCTION IN PATTERN! MUST FINISH SENDING BEFORE NEXT CALL OF FRAME FUNCTION;
 }
 
 /* This function shall be called when the USI has
@@ -181,6 +185,7 @@ __attribute__((interrupt(USI_VECTOR))) void USIServiceRoutine(void) {
   send();
 }
 
+/* This function shall be called when switch P1.3 (S1) is pressed down. */
 __attribute__((interrupt(PORT1_VECTOR))) void Port1ServiceRoutine(void) {
   P1IFG = 0;
   rotate();

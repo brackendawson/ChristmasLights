@@ -1,18 +1,20 @@
-//Constants for this pattern
+//Definitions for this pattern
   unsigned char run_index;
   unsigned char run_colour;
 
 //functions for this pattern
 
+//init function
 void run_init(void) {
   run_index = 0;
   run_colour = RED;
   return;
 }
 
+//frame function
 void run_frame(void) {
   run_index++;
-  if (run_index > 49) { //todo: 100, not 50
+  if (run_index >= NUM_LEDS) {
     run_index = 0;
     run_colour++;
     if (run_colour > INDIGO) {
@@ -22,6 +24,7 @@ void run_frame(void) {
   return;
 }
 
+//getled function
 unsigned long run_getled(unsigned char led) {
   if (led == run_index) {
     return(colour(run_colour,99));

@@ -1,12 +1,15 @@
-//Constants for this pattern
+/* Global definitions for this pattern, must be unique, it
+is a good idea to prefix the pattern name. */
 unsigned char fadeall_pat_brt;
 _Bool fadeall_pat_dir;
 unsigned long fadeall_buffer[6];
 
-//functions for this pattern
+/* Private functions for this pattern, if you need any.
+Make the names unique. */
 
 /* init function for this pattern, called when beginning
-this pattern */
+this pattern before the first call of x_frame(). Prefixed
+with the pattern name. */
 void fadeall_init(void) {
   fadeall_pat_brt = 0;
   fadeall_pat_dir = 1;
@@ -16,12 +19,13 @@ void fadeall_init(void) {
 /* frame function for this pattern, called 25 times per
 second while displaying this pattern. It should be fairly
 efficient, if it takes too long P1.0 output will be set
-to 1 (red LED on launchpad). */
+to 1 (red LED on launchpad). Prefixed with pattern name. */
 void fadeall_frame(void) {
-  fadeall_buffer[0] = colour(RED,fadeall_pat_brt);	/* colour(unsigned char color, unsigned char brightness)
-					is a helper function that returns the 24-bit colour value
-					for any colour defined in colours.h and a brightess from
-					0 (off) to 99 (full brighness). */
+  /* colour(colour, brightness) is a useful helper function,
+    it will retrun the 24 bit RGB value as unsigned long for
+    a colour defined in ../colours.h and brightness from 0
+    to 99 as unsigned char. */
+  fadeall_buffer[0] = colour(RED,fadeall_pat_brt);
   fadeall_buffer[1] = colour(ORANGE,fadeall_pat_brt);
   fadeall_buffer[2] = colour(YELLOW,fadeall_pat_brt);
   fadeall_buffer[3] = colour(GREEN,fadeall_pat_brt);
@@ -43,19 +47,14 @@ void fadeall_frame(void) {
   return;
 }
 
-/* led function for this pattern called many times in no
+/* getled function for this pattern called many times in no
 guarented order, but always after the frame function has
 finished.
-Will be passed and unsigned char between 0 and 99, must
-return the 24-bit colour value for the correspinding
-LED as the right three bytes of an unsigned long. The
-left byte is reserverved and should be returned zero. */
+Will be passed and unsigned char representing an LED index,
+you must return the 24bit RGB value as unsigned long for that
+LED. Your pattern should handle as many LEDs as are defined by
+NUM_LEDS, that's up to 255.
+Prefixed with pattern name. */
 unsigned long fadeall_getled(unsigned char led) {
-  //TODO: put this in the right place
-  return fadeall_buffer[led%6];		/* buffer is an array of unsigned long
-				which you can use however you like, make
-				it larger via the option in configuration.h
-				if you need to	and never assume you know
-				how long it is.	Defining your own array will
-				use more RAM. */
+  return fadeall_buffer[led%6];
 }

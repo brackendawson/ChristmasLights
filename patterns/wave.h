@@ -14,6 +14,7 @@ unsigned long wave_colour(unsigned char col, unsigned char brt) {
   return colour(col, brt);
 }
 
+//init function
 void wave_init(void) {
   wave_dir = 1;
   wave_fade_a = 99;
@@ -23,6 +24,7 @@ void wave_init(void) {
   return;
 }
 
+//frame function
 void wave_frame(void) {
   if (wave_dir) {
     wave_fade_a -= 10;
@@ -60,6 +62,7 @@ void wave_frame(void) {
   return;
 }
 
+//getled function
 unsigned long wave_getled(unsigned char led) {
   return(wave_buffer[led%12]);
 }
