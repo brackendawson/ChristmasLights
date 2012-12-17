@@ -20,8 +20,9 @@ check. */
 #include "patterns/run.h"
 #include "patterns/chameleon.h"
 #include "patterns/wave.h"
+#include "patterns/twinkle.h"
 
-#define NUM_PATTERNS 4			//not including static
+#define NUM_PATTERNS 5			//not including static
 unsigned char current_pattern = 0;	//default pattern, 0 is static
 #define CYCLE_TIME 60/0.04		//frames to display a pattern for in cycle mode, must be integer, for convinience say "seconds/0.04".
 _Bool cycle = 0;			//0 means default to not cycling, 1 means default to cycling from the default pattern
@@ -45,6 +46,9 @@ void init(void) {
     case 4:
       wave_init();
       break;
+    case 5:
+      twinkle_init();
+      break;
   }
   return;
 }
@@ -66,6 +70,9 @@ void frame(void) {
     case 4:
       wave_frame();
       break;
+    case 5:
+      twinkle_frame();
+      break;
   }
   return;
 }
@@ -82,6 +89,8 @@ unsigned long getled(unsigned char brightness) {
       return chameleon_getled(brightness);
     case 4:
       return wave_getled(brightness);
+    case 5:
+      return twinkle_getled(brightness);
   }
   return(0);
 }

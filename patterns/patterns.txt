@@ -14,10 +14,9 @@ ROYGBI
 OYGBIR
 
 ============
-Twinkle Star
+Twinkle Star done
 ============
-Not using the standard buffer, turn white leds off and on individually.
-Will look slower on 50 LED model.
+Not using the standard buffer, turn white leds off and onn sort of randomly.
 
 ======
 Candle
