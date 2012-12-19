@@ -4,6 +4,8 @@ It drives a WS2801 based string of RGB LEDs (or 2
 strings, or more...) to create lights for a christmass
 tree.
 
+Copyright 2012 - Bracken Dawson - Licensed under GPLv3.
+
 ===========
 CONFIGURING
 ===========
@@ -23,6 +25,9 @@ MSP430 MINIMUM REQUIREMENTS
  * DCO.
  * TimerA0.
  * USI.
+
+I use the MSP430G2452 that comes with more recently
+shipped launchpad development boards.
 
 (If you use my code as a base for a simple program
 with one pattern it will fit on a 2KB chip.)
