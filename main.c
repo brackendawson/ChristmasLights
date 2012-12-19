@@ -46,6 +46,8 @@ USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;
 //setup timers
 //       SMCLK      /8     Up mode   interrupt enabled
 TA0CTL = TASSEL_2 | ID_3 | MC_1    | TAIE;
+//         higher priority interrupt enabled too
+TA0CCTL0 = CCIE;
 
 //initialise default pattern, defined in configuration.h
 init();
@@ -152,18 +154,37 @@ void send(void) {
 }
 
 /* This function shall be called very roughly every
+1 milisecond, one cycle before TimerA1ServerRoutine
+is called. It shall also be called while that service
+routine is running. This means I can use it to
+increment timera_div. */
+__attribute__((interrupt(TIMER0_A0_VECTOR))) void TimerA0ServiceRoutine(void) {
+  //No need to clear CCIFG, it's done automatically.
+  if (timera_div > DCO_CAL_DIV) {
+    /* set red LED is this happens. It means the pattern
+    frame function is too slow, it was still running when
+    it was time for the next frame plus one timer wrap. */
+    P1OUT = 1;
+  }
+  timera_div++;
+  return;
+}
+
+/* This function shall be called very roughly every
 1 milisecond. Using this every somethingth iteration
 gives 25 times per second. Calibrate with DCO_CAL_DIV*/
 __attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
   TA0CTL = TA0CTL - TAIFG; //reset Timer A interrupt flag
-  if (timera_div++ < DCO_CAL_DIV) {
+  if (timera_div < DCO_CAL_DIV) {
     return;
   }
   timera_div = 0;  
 
   if (usi_state != USI_IDLE) {
-    /*set red LED if this happens. It means the pattern function
-     is too slow. The string might also look wrong. */
+    /*set red LED if this happens. It means the pattern frame
+    function is too slow, the USI is still transmitting when
+    we call the frame function again. The string might look
+    wrong. */
     P1OUT = 1;
   }
 
