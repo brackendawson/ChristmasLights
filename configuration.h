@@ -5,7 +5,7 @@ this file too... :-) */
 /* Remember to set your MCU in the Makefile */
 
 /* Number of LEDs in the string, up to 255 */
-#define NUM_LEDS	50
+#define NUM_LEDS	100
 
 /* Timer calibration, if the patterns are too fast, make
 this larger. Not all MSP430s were created equal and few

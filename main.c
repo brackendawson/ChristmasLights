@@ -38,7 +38,7 @@ P1OUT = 0;
 //setup USI
 //        edges     interrupt disabled and USIIFG cleared by this
 USICTL1 = USICKPH;
-//         SMCLK      no div
+//         SMCLK       /8
 USICKCTL = USISSEL_2 | USIDIV_3;
 //        Output and clk    output enable   master    this reanables the USI by clearning USISWRST
 USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;

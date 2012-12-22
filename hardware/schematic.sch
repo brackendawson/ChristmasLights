@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Thu 20 Dec 2012 17:31:51 GMT
+EESchema Schematic File Version 2  date Thu 20 Dec 2012 18:24:55 GMT
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,6 +29,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:schematic-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
@@ -43,6 +44,11 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Connection ~ 4650 1500
+Wire Wire Line
+	4650 1500 4750 1500
+Wire Wire Line
+	4750 1500 4750 1400
 Connection ~ 5350 2200
 Wire Wire Line
 	5350 4300 5350 1500
@@ -200,8 +206,11 @@ Wire Wire Line
 	4600 1500 4600 2500
 Wire Wire Line
 	4600 2500 4150 2500
+Wire Wire Line
+	4550 1400 4550 1500
+Connection ~ 4550 1500
 $Comp
-L CONN_1 T3
+L CONN_1 T3~nopop
 U 1 1 50D343C1
 P 5550 1200
 F 0 "T3 nopop" H 5630 1200 40  0000 L CNN
@@ -210,7 +219,7 @@ F 1 "CONN_1" H 5550 1255 30  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L CONN_10 T2
+L CONN_10 T2~nopop
 U 1 1 50D34243
 P 4900 1050
 F 0 "T2 nopop" V 4850 1050 60  0000 C CNN
@@ -237,7 +246,7 @@ F 1 "56K" V 5550 2050 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D1
+L LED D1~nopop
 U 1 1 50D33CDC
 P 2650 3600
 F 0 "D1 nopop" H 2650 3700 50  0000 C CNN
@@ -246,7 +255,7 @@ F 1 "LED" H 2650 3500 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R R5
+L R R5~nopop
 U 1 1 50D33CCD
 P 2650 2550
 F 0 "R5 nopop" V 2730 2550 50  0000 C CNN
@@ -255,7 +264,7 @@ F 1 "75R" V 2650 2550 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH S1
+L SW_PUSH S1~nopop
 U 1 1 50D33695
 P 4050 3700
 F 0 "S1 nopop" H 4200 3810 50  0000 C CNN
@@ -291,10 +300,10 @@ F 1 "47K" V 3150 1900 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C5
+L C C5~nopop
 U 1 1 50D334EC
 P 4450 3650
-F 0 "C5" H 4500 3750 50  0000 L CNN
+F 0 "C5 nopop" H 4500 3750 50  0000 L CNN
 F 1 "1nF" H 4500 3550 50  0000 L CNN
 	1    4450 3650
 	1    0    0    -1  
