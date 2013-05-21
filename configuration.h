@@ -77,20 +77,20 @@ void frame(void) {
   return;
 }
 
-unsigned long getled(unsigned char brightness) {
+unsigned long getled(unsigned char index) {
   switch (current_pattern) {
     case 0:
-      return static_getled(brightness);
+      return static_getled(index);
     case 1:
-      return fade_getled(brightness);
+      return fade_getled(index);
     case 2:
-      return run_getled(brightness);
+      return run_getled(index);
     case 3:
-      return chameleon_getled(brightness);
+      return chameleon_getled(index);
     case 4:
-      return wave_getled(brightness);
+      return wave_getled(index);
     case 5:
-      return twinkle_getled(brightness);
+      return twinkle_getled(index);
   }
   return(0);
 }
