@@ -22,7 +22,7 @@ bool cycle = 1;			//0 means default to not cycling, 1 means default to cycling f
 
 
 //add the patterns you desire and have #included to these three switches
-void init(void) {
+void pattern_init(void) {
   switch (current_pattern) {
     case 0:
       static_init();

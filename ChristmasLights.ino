@@ -63,7 +63,7 @@ void rotate(void) {
     and go to static. */
     cycle = 0;
     current_pattern = 0;
-    init();
+    pattern_init();
   } else {
     /* we are not in cycle mode,
     incriment mode or enable cycle
