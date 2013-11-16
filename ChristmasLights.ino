@@ -42,12 +42,14 @@ void loop() {
   
   if (div1 >= DIV1_WRAP) {
     //every ~40ms ~25FPS
+    div1=0;
     ++div2;
     frame();
     stringsend();
     
     if (div2 >= DIV2_WRAP) {
       //every ~600s
+      div2=0;
       cyclepattern();
     }
   }
