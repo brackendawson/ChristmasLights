@@ -1,4 +1,9 @@
-#include <SPI.h>
+#include <FastSPI_LED.h>
+
+// Sometimes chipsets wire in a backwards sort of way
+struct CRGB { unsigned char b; unsigned char r; unsigned char g; };
+// struct CRGB { unsigned char r; unsigned char g; unsigned char b; };
+struct CRGB *leds;
 
 #include "colours.h"
 #include "configuration.h"
@@ -20,8 +25,15 @@ unsigned int div2 = 0;
 
 void setup() {                
   //start the SPI for the WAS2801 string, default is 4MHz
-  SPI.begin();
-  
+  FastSPI_LED.setLeds(NUM_LEDS);
+  FastSPI_LED.setChipset(CFastSPI_LED::SPI_WS2801);
+
+  //FastSPI_LED.setPin(PIN);
+  FastSPI_LED.setDataRate(1);
+  FastSPI_LED.init();
+  FastSPI_LED.start();
+
+  leds = (struct CRGB*)FastSPI_LED.getRGBData();
 }
 
 void loop() {
@@ -44,15 +56,17 @@ void loop() {
 /* The function to send SPI data to the string, it
  will transmit the whole string and then return. */
 void stringsend(void) {
-  for (unsigned char led_index = 0; led_index >= NUM_LEDS - 1; ++led_index) {
-    unsigned long current_led = getled(led_index);
+  memset(leds, 255, NUM_LEDS * 3);
+  for(int i = 0 ; i < NUM_LEDS; i++ ) {
+    unsigned long current_led = getled(i);
     //transmit red
-    SPI.transfer(current_led >> 16);
+    leds[i].r = current_led >> 16;
     //transmit green
-    SPI.transfer(current_led >>8);
+    leds[i].g = current_led >>8;
     //transmit blue
-    SPI.transfer(current_led);
+    leds[i].b = current_led;
   }
+  FastSPI_LED.show();
 }
 
 /* The function to move the pattens up 1 and enable/disable
