@@ -4,7 +4,7 @@ unsigned char wave_fade_a;
 unsigned char wave_fade_b;
 unsigned char wave_col_a;
 unsigned char wave_col_b;
-_Bool wave_dir;
+bool wave_dir;
 
 //functions for this pattern
 unsigned long wave_colour(unsigned char col, unsigned char brt) {

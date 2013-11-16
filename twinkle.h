@@ -1,5 +1,4 @@
-//Definitions for this pattern
-_Bool twinkle_buffer[16];	//2 byte array for boolean twinkle values.
+bool twinkle_buffer[16];	//2 byte array for boolean twinkle values.
 #define TWINKLE_ON	0x00FFFFFF
 #define TWINKLE_OFF	0x00000000
 unsigned char twinkle_i;

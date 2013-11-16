@@ -1,7 +1,7 @@
 /* Global definitions for this pattern, must be unique, it
 is a good idea to prefix the pattern name. */
 unsigned char fade_pat_brt;
-_Bool fade_pat_dir;
+bool fade_pat_dir;
 unsigned long fade_buffer[6];
 
 /* Private functions for this pattern, if you need any.

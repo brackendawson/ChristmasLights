@@ -1,5 +1,5 @@
 //Definitions for this pattern
-_Bool chameleon_dir;
+bool chameleon_dir;
 unsigned char chameleon_brightness;
 unsigned char chameleon_colour;
 
