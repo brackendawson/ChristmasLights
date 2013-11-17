@@ -38,7 +38,7 @@ void fade_frame(void) {
       fade_pat_brt++;
     }
   } else {
-    if (fade_pat_brt <= 0) {
+    if (fade_pat_brt == 0) {
       fade_pat_dir = 1;
     } else {
       fade_pat_brt--;

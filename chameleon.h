@@ -22,7 +22,7 @@ void chameleon_frame(void) {
     }
   } else {
     chameleon_brightness--;
-    if (chameleon_brightness <= 0) {
+    if (chameleon_brightness == 0) {
       chameleon_dir = 1;
       chameleon_colour++;
       if (chameleon_colour > INDIGO) {
