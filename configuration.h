@@ -43,12 +43,6 @@ void pattern_init(void) {
       twinkle_init();
       break;
   }
-/* Timer calibration, if the patterns are too fast, make
-this larger. Not all MSP430s were created equal and few
-come with larger than a 1MHz calibration. 
-The Cycle time defined by CYCLE_TIME is a good thing to
-check. */
-#define DCO_CAL_DIV	16  return;
 }
 
 void frame(void) {
