@@ -8,6 +8,7 @@
 #define GREEN	5	//  0 255   0
 #define BLUE	6	//  0   0 255
 #define INDIGO	7	//255   0  80
+#define NUM_COLOURS 8
 
 /* These colours need 4 sub-pixel tables.
  I fancy 100 vlaue per table */

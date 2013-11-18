@@ -15,6 +15,7 @@ this file too... :-) */
 #include "wave.h"
 #include "twinkle.h"
 #include "pacman.h"
+#include "firework.h"
 
 typedef struct pattern_t {
   void (*init)();
@@ -31,6 +32,7 @@ pattern patterns[] =
     { &wave_init, &wave_frame, &wave_getled },
     { &twinkle_init, &twinkle_frame, &twinkle_getled },
     { &pacman_init, &pacman_frame, &pacman_getled },
+    { &firework_init, &firework_frame, &firework_getled },
   };
 
 #define NUM_PATTERNS (sizeof(patterns)/sizeof(pattern)-1)

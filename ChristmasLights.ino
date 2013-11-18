@@ -18,7 +18,7 @@ void cyclepattern(void);
 void stringsend(void);
 
 /*Dividers for the timing*/
-#define DIV1_WRAP 20         //1ms to 40ms
+#define DIV1_WRAP 160         //1ms to 40ms
 unsigned char div1 = 0;
 #define DIV2_WRAP 60*25    //40ms to 10 minutes
 unsigned int div2 = 0;
@@ -71,7 +71,7 @@ void stringsend(void) {
     leds[i].b = current_led;
   }
   FastSPI_LED.show();
-  delay(10); // without this lights are "random"
+  delay(40); // without this lights are "random"
 }
 
 /* The function to move the pattens up 1 and enable/disable

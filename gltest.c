@@ -5,6 +5,7 @@
 
 #ifndef ARDUINO
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef __APPLE_CC__
 #include <GLUT/glut.h>
@@ -13,6 +14,9 @@
 #endif
 
 typedef unsigned char bool;
+
+/* Macro to match arduino function. */
+#define random(MIN,MAX) ((MIN)+(rand()%((MAX)-(MIN))))
 
 #include <colours.h>
 #include <configuration.h>
@@ -28,9 +32,10 @@ void cyclepattern();
  will transmit the whole string and then return. */
 void stringsend();
 
+
 /*Dividers for the timing*/
-#define DIV1_WRAP 10         //1ms to 40ms
-unsigned char div1 = 0;
+#define DIV1_WRAP 500         //1ms to 40ms
+unsigned int div1 = 0;
 #define DIV2_WRAP 60*25    //40ms to 10 minutes
 unsigned int div2 = 0;
 
@@ -146,8 +151,7 @@ void cyclepattern(void) {
     current_pattern++;
     pattern_init();
   }
-  printf("<tr><td colspan=\"%d\">Changed to pattern %d</td><tr>\n",
-         NUM_LEDS, current_pattern);
+  printf("Changed to pattern %d\n", current_pattern);
   return;
 }
 
