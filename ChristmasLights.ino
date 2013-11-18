@@ -1,8 +1,8 @@
 #include <FastSPI_LED.h>
 
 // Sometimes chipsets wire in a backwards sort of way
-struct CRGB { unsigned char b; unsigned char r; unsigned char g; };
-// struct CRGB { unsigned char r; unsigned char g; unsigned char b; };
+//struct CRGB { unsigned char b; unsigned char r; unsigned char g; };
+struct CRGB { unsigned char r; unsigned char g; unsigned char b; };
 struct CRGB *leds;
 
 #include "colours.h"
@@ -18,9 +18,9 @@ void cyclepattern(void);
 void stringsend(void);
 
 /*Dividers for the timing*/
-#define DIV1_WRAP 40         //1ms to 40ms
+#define DIV1_WRAP 160         //1ms to 40ms
 unsigned char div1 = 0;
-#define DIV2_WRAP 600*25    //40ms to 10 minutes
+#define DIV2_WRAP 60*25    //40ms to 10 minutes
 unsigned int div2 = 0;
 
 void setup() {                
@@ -34,6 +34,8 @@ void setup() {
   FastSPI_LED.start();
 
   leds = (struct CRGB*)FastSPI_LED.getRGBData();
+
+  pattern_init();
 }
 
 void loop() {
@@ -69,6 +71,7 @@ void stringsend(void) {
     leds[i].b = current_led;
   }
   FastSPI_LED.show();
+  delay(40); // without this lights are "random"
 }
 
 /* The function to move the pattens up 1 and enable/disable
@@ -89,10 +92,10 @@ void rotate(void) {
       cycle from pattern 1. */
       cycle = 1;
       current_pattern = 1;
-      init();
+      pattern_init();
     } else {
       current_pattern++;
-      init();
+      pattern_init();
     }
   }
 
@@ -106,10 +109,10 @@ void cyclepattern(void) {
   }
   if (NUM_PATTERNS <= current_pattern) {
     current_pattern = 1;
-    init();
+    pattern_init();
   } else {
     current_pattern++;
-    init();
+    pattern_init();
   }
   return;
 }

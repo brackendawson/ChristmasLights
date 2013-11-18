@@ -39,3 +39,6 @@ Icon?
 ehthumbs.db
 Thumbs.db
 *.swp
+gltest
+gltest.o
+*~
