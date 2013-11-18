@@ -2,10 +2,23 @@
 Of course you're free to change anything outside
 this file too... :-) */
 
-/* Remember to set your MCU in the Makefile */
+/* MSP430 only, remember to set your MCU in the Makefile */
 
 /* Number of LEDs in the string, up to 255 */
 #define NUM_LEDS	50
+
+#ifndef ARDUINO
+/* MSP430 only, Timer calibration, if the patterns are
+ too fast, make this larger. Not all MSP430s were
+ created equal and few come with larger than a 1MHz
+ calibration data. The Cycle time defined by
+ CYCLE_TIME is a good thing to check. */
+#define DCO_CAL_DIV	16
+
+/* MSP430 only, add hacks for arduino stuff like
+ random() and type bool. */
+#include "msp430/arduino2msp430.h"
+#endif
 
 //Patterns to include
 #include "static.h"	//removing static breaks cycle mode logic
@@ -15,7 +28,7 @@ this file too... :-) */
 #include "wave.h"
 #include "twinkle.h"
 #include "pacman.h"
-#include "firework.h"
+//#include "firework.h"
 
 typedef struct pattern_t {
   void (*init)();
@@ -32,7 +45,7 @@ pattern patterns[] =
     { &wave_init, &wave_frame, &wave_getled },
     { &twinkle_init, &twinkle_frame, &twinkle_getled },
     { &pacman_init, &pacman_frame, &pacman_getled },
-    { &firework_init, &firework_frame, &firework_getled },
+//    { &firework_init, &firework_frame, &firework_getled },
   };
 
 #define NUM_PATTERNS (sizeof(patterns)/sizeof(pattern)-1)
