@@ -8,7 +8,7 @@ unsigned char colourtwinkle_div;
 void colourtwinkle_init(void) {
   colourtwinkle_div = 0;
   for (unsigned char i = 0; i < COLOURTWINKLE_ELEMENTS; i++) {
-    colourtwinkle_buffer[i] = (unsigned char) random(1,NUM_COLOURS);
+    colourtwinkle_buffer[i] = (unsigned char) random(RED,INDIGO+1); //random()'s max argument is exclusive
   }
   return;
 }
@@ -22,8 +22,7 @@ void colourtwinkle_frame(void) {
   colourtwinkle_div = 0;
 
   //set a random LED to a random colour
-  colourtwinkle_buffer[random(0,COLOURTWINKLE_ELEMENTS)] = (unsigned char) random(1,NUM_COLOURS);
-
+  colourtwinkle_buffer[random(0,COLOURTWINKLE_ELEMENTS)] = (unsigned char) random(RED,INDIGO+1);
   return;
 }
 
