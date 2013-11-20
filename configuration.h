@@ -30,8 +30,8 @@ this file too... :-) */
 #include "chameleon.h"
 #include "wave.h"
 #include "twinkle.h"
-//#include "pacman.h"
-//#include "firework.h"
+#include "pacman.h"
+#include "firework.h"
 
 typedef struct pattern_t {
   void (*init)();
@@ -50,8 +50,8 @@ pattern patterns[] =
     { &chameleon_init, &chameleon_frame, &chameleon_getled },
     { &wave_init, &wave_frame, &wave_getled },
     { &twinkle_init, &twinkle_frame, &twinkle_getled },
-//    { &pacman_init, &pacman_frame, &pacman_getled },
-//    { &firework_init, &firework_frame, &firework_getled },
+    { &pacman_init, &pacman_frame, &pacman_getled },
+    { &firework_init, &firework_frame, &firework_getled },
   };
 
 unsigned char current_pattern = 1;	//default pattern, 0 is static

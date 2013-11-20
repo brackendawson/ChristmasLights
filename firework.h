@@ -47,7 +47,7 @@ void firework_frame(void) {
     if (firework_pos >= firework_exp_pos) {
       firework_state = EXPLODED;
       firework_pos = 0; // size of explosion
-      firework_col = random(1,NUM_COLOURS-1);
+      firework_col = random(1,NUM_COLOURS); //max argument on random is exclusive, min is inclusive
       firework_size = random(10,20);
       firework_exp_col =
         colour(firework_col, percent(firework_size-firework_pos,firework_size));
