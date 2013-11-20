@@ -3,6 +3,7 @@ is a good idea to prefix the pattern name. */
 unsigned char firework_pos;
 unsigned char firework_exp_pos;
 unsigned char firework_col;
+unsigned long firework_exp_col;
 unsigned char firework_size;
 enum firework_states {
   LAUNCHED = 1,
@@ -19,8 +20,18 @@ with the pattern name. */
 void firework_init(void) {
   firework_pos = 0;
   firework_state = LAUNCHED;
-  firework_exp_pos = random(NUM_LEDS/2,NUM_LEDS-10);
+  firework_exp_pos = random((NUM_LEDS>>1), NUM_LEDS-10);
   return;
+}
+
+unsigned char percent(unsigned int n, unsigned char d) {
+  unsigned char r;
+  n *= 100;
+  while (n >= d) {
+    n -= d;
+    r++;
+  }
+  return r;
 }
 
 /* frame function for this pattern, called 25 times per
@@ -38,6 +49,8 @@ void firework_frame(void) {
       firework_pos = 0; // size of explosion
       firework_col = random(1,NUM_COLOURS-1);
       firework_size = random(10,20);
+      firework_exp_col =
+        colour(firework_col, percent(firework_size-firework_pos,firework_size));
     } else {
       firework_pos++;
     }
@@ -46,6 +59,8 @@ void firework_frame(void) {
       firework_init();
     } else {
       firework_pos++;
+      firework_exp_col =
+        colour(firework_col, percent(firework_size-firework_pos,firework_size));
     }
   }
   return;
@@ -63,11 +78,10 @@ unsigned long firework_getled(unsigned char led) {
   if (firework_state == LAUNCHED) {
     return firework_pos == led ? 0xff7f7f : 0x000000;
   } else {
-    for (int i = 1; i < 4; i++) {
-      if (led == firework_exp_pos+firework_pos/i ||
-          led == firework_exp_pos-firework_pos/i) {
-        return colour(firework_col,
-                      (firework_size-firework_pos)*100/firework_size);
+    for (int i = 0; i < 3; i++) {
+      int offset = firework_pos >> i;
+      if (led == firework_exp_pos+offset || led == firework_exp_pos-offset) {
+        return firework_exp_col;
       }
     }
   }
