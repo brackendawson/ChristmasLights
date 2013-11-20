@@ -1,5 +1,6 @@
 #ifndef ARDUINO
 #include <msp430.h>
+#include "msp430/arduino2msp430.h"
 #include "colours.h"
 #include "configuration.h"
 
@@ -30,7 +31,6 @@ DCOCTL = 0b11100000 | 0b00011111;
 BCSCTL1 = XT2OFF | 0b00001111;
 
 //setup GPIO
-//P1DIR = 0b11110111;  //S2 (P1.3 is input)
 P1DIR = ~(1 << BUTTON_PIN); 
 P1IFG = 0;           //Clear interrupts
 P1IES = 255;         //interrupt on falling edge

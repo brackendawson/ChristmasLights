@@ -19,15 +19,11 @@ this file too... :-) */
  too fast, make this larger. Not all MSP430s were
  created equal and few come with larger than a 1MHz
  calibration data. The Cycle time defined by
- CYCLE_TIME is a good thing to check. */
+ CYCLE_TIME is a good thing to test against. */
 #define DCO_CAL_DIV	16
-
-/* MSP430 only, add hacks for arduino stuff like
- random() and type bool. */
-#include "msp430/arduino2msp430.h"
 #endif
 
-//Patterns to include
+//Patterns to include when compiling
 #include "static.h"	//removing static breaks cycle mode logic
 #include "fade.h"
 #include "run.h"
@@ -43,6 +39,9 @@ typedef struct pattern_t {
   unsigned long (*get)(unsigned char);
 } pattern;
 
+/* Add the patterns you wish to display into this structure
+ in the order you want to see them static must be the first
+ element. */
 pattern patterns[] =
   {
     { &static_init, &static_frame, &static_getled }, // keep static first
@@ -55,13 +54,14 @@ pattern patterns[] =
 //    { &firework_init, &firework_frame, &firework_getled },
   };
 
-#define NUM_PATTERNS (sizeof(patterns)/sizeof(pattern)-1)
 unsigned char current_pattern = 1;	//default pattern, 0 is static
 #define CYCLE_TIME 300/0.04		//frames to display a pattern for in cycle mode, must be integer, for convinience say "seconds/0.04".
-bool cycle = 1;			//0 means default to not cycling, 1 means default to cycling from the default pattern
+bool cycle = 1;	        		//0 means default to not cycling, 1 means default to cycling from the default pattern
 
+//No need to edit below this line
+//-------------------------------
+#define NUM_PATTERNS (sizeof(patterns)/sizeof(pattern)-1)
 
-//add the patterns you desire and have #included to these three switches
 void pattern_init(void) {
   patterns[current_pattern].init();
 }
