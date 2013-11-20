@@ -20,7 +20,6 @@ void stringsend(void);
 /*Dividers for the timing*/
 #define DIV1_WRAP 160         //1ms to 40ms
 unsigned char div1 = 0;
-#define DIV2_WRAP 60*25    //40ms to 10 minutes
 unsigned int div2 = 0;
 
 //button
@@ -55,7 +54,7 @@ void loop() {
     frame();
     stringsend();
     
-    if (div2 >= DIV2_WRAP) {
+    if (div2 >= CYCLE_TIME) {
       //every ~600s
       div2=0;
       cyclepattern();
