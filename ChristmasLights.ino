@@ -23,18 +23,24 @@ unsigned char div1 = 0;
 #define DIV2_WRAP 60*25    //40ms to 10 minutes
 unsigned int div2 = 0;
 
+//button
+int button_state = 1;
+
 void setup() {                
   //start the SPI for the WAS2801 string, default is 4MHz
   FastSPI_LED.setLeds(NUM_LEDS);
   FastSPI_LED.setChipset(CFastSPI_LED::SPI_WS2801);
 
   //FastSPI_LED.setPin(PIN);
-  FastSPI_LED.setDataRate(1);
+  FastSPI_LED.setDataRate(2);
   FastSPI_LED.init();
   FastSPI_LED.start();
 
   leds = (struct CRGB*)FastSPI_LED.getRGBData();
-
+  
+  //Mode button
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+ 
   pattern_init();
 }
 
@@ -55,6 +61,15 @@ void loop() {
       cyclepattern();
     }
   }
+  
+  //button
+  int button_now = digitalRead(BUTTON_PIN);
+  if (button_now < button_state) {
+    rotate();
+    button_state = button_now;
+  } else {
+    button_state = button_now;
+  }
 }
 
 /* The function to send SPI data to the string, it
@@ -66,7 +81,7 @@ void stringsend(void) {
     //transmit red
     leds[i].r = current_led >> 16;
     //transmit green
-    leds[i].g = current_led >>8;
+    leds[i].g = current_led >> 8;
     //transmit blue
     leds[i].b = current_led;
   }

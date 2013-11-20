@@ -7,6 +7,13 @@ this file too... :-) */
 /* Number of LEDs in the string, up to 255 */
 #define NUM_LEDS	50
 
+/* Pin for mode button on MSP430 */
+#define BUTTON_PIN      3       //P1.3 (S2 on launchpad)
+/* Pin for mode button on arduino */
+#ifdef ARDUINO
+#define BUTTON_PIN      7
+#endif
+
 #ifndef ARDUINO
 /* MSP430 only, Timer calibration, if the patterns are
  too fast, make this larger. Not all MSP430s were
@@ -27,7 +34,7 @@ this file too... :-) */
 #include "chameleon.h"
 #include "wave.h"
 #include "twinkle.h"
-#include "pacman.h"
+//#include "pacman.h"
 //#include "firework.h"
 
 typedef struct pattern_t {
@@ -44,7 +51,7 @@ pattern patterns[] =
     { &chameleon_init, &chameleon_frame, &chameleon_getled },
     { &wave_init, &wave_frame, &wave_getled },
     { &twinkle_init, &twinkle_frame, &twinkle_getled },
-    { &pacman_init, &pacman_frame, &pacman_getled },
+//    { &pacman_init, &pacman_frame, &pacman_getled },
 //    { &firework_init, &firework_frame, &firework_getled },
   };
 
