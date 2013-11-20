@@ -129,10 +129,10 @@ void rotate(void) {
       cycle from pattern 1. */
       cycle = 1;
       current_pattern = 1;
-      //init();
+      pattern_init();
     } else {
       current_pattern++;
-      //init();
+      pattern_init();
     }
   }
 
