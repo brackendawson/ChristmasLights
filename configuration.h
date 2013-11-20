@@ -32,6 +32,7 @@ this file too... :-) */
 #include "twinkle.h"
 #include "pacman.h"
 #include "firework.h"
+#include "colourtwinkle.h"
 
 typedef struct pattern_t {
   void (*init)();
@@ -52,6 +53,7 @@ pattern patterns[] =
     { &twinkle_init, &twinkle_frame, &twinkle_getled },
     { &pacman_init, &pacman_frame, &pacman_getled },
     { &firework_init, &firework_frame, &firework_getled },
+    { &colourtwinkle_init, &colourtwinkle_frame, &colourtwinkle_getled },
   };
 
 unsigned char current_pattern = 1;	//default pattern, 0 is static
