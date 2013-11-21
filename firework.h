@@ -25,7 +25,7 @@ void firework_init(void) {
 }
 
 unsigned char percent(unsigned int n, unsigned char d) {
-  unsigned char r;
+  unsigned char r = 0;
   n *= 100;
   while (n >= d) {
     n -= d;
