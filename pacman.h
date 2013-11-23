@@ -59,21 +59,20 @@ unsigned long pacman_getled(unsigned char led) {
   if (pacman_pos == led) {
     return 0xff7a00; // pacman
   }
+
+  // orange ghost
+  if (led+6 == pacman_pos) return pacman_dir ? 0xff2000 : 0x00007f;
+
+  // cyan ghost
+  if (led+12 == pacman_pos) return pacman_dir ? 0x00ffff : 0x00007f;
+
+  // pink ghost
+  if (led+16 == pacman_pos) return pacman_dir ? 0xff0050 : 0x00007f;
+
   if (pacman_dir) {
     // TOFIX: underflows when pacman_pos < 10 and NUM_LEDS is close to 255
-    if (led == NUM_LEDS - 1) return 0xff0000; // red cherry
-    if (led == pacman_pos - 6) return 0xff2000; // orange ghost
-    if (led == pacman_pos - 12) return 0x00ffff; // cyan ghost
-    if (led == pacman_pos - 16) return 0xff0050; // pink ghost
-    if ( (led > pacman_pos) & (led % 2 == 0) ) {
-      return 0xffffff;
-    } else {
-      return 0x000000;
-    }
-  } else {
-    if (led == pacman_pos - 6) return 0x00007f;
-    if (led == pacman_pos - 12) return 0x00007f;
-    if (led == pacman_pos - 16) return 0x00007f;
-    return 0x000000;
+    if (led+1 == NUM_LEDS) return 0xff0000; // red cherry
+    if ( (led % 2 == 0) & (led > pacman_pos) ) return 0xffffff;
   }
+  return 0x000000;
 }
