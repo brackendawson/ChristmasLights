@@ -1,5 +1,5 @@
 /*
- * gcc -o gltest.o  gltest.c -std=c99 -Wall `pkg-config --cflags gl` -I.
+ * gcc -c -o gltest.o  gltest.c -std=c99 -Wall `pkg-config --cflags gl` -I.
  * gcc -o gltest gltest.o `pkg-config --libs gl` -lglut
  */
 
