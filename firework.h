@@ -78,9 +78,9 @@ unsigned long firework_getled(unsigned char led) {
   if (firework_state == LAUNCHED) {
     return firework_pos == led ? 0xff7f7f : 0x000000;
   } else {
-    for (int i = 0; i < 3; i++) {
-      int offset = firework_pos >> i;
-      if (led == firework_exp_pos+offset || led == firework_exp_pos-offset) {
+    for (unsigned char i = 0; i < 3; i++) {
+      unsigned char offset = firework_pos >> i;
+      if (led == firework_exp_pos+offset || led+offset == firework_exp_pos) {
         return firework_exp_col;
       }
     }
