@@ -53,46 +53,24 @@ unsigned long colour(unsigned char colour, unsigned char brightness) {
   if (brightness > 99) {
     brightness = 99;
   }
-  unsigned long value = 0;
+  unsigned long value = SUBP_255[brightness];
   switch (colour) {
     case BLACK:
-      break;
+      return 0;
     case WHITE:
-      value = SUBP_255[brightness];
-      value = value << 8;
-      value = value | SUBP_255[brightness];
-      value = value << 8;
-      value = value | SUBP_255[brightness];
-      break;
+      return (value << 16) | (value << 8) | value;
     case RED:
-      value = SUBP_255[brightness];
-      value = value << 16;
-      break;
+      return value << 16;
     case ORANGE:
-      value = SUBP_255[brightness];
-      value = value << 8;
-      value = value | SUBP_32[brightness];
-      value = value << 8;
-      break;
+      return (value << 16) | (SUBP_32[brightness] << 8);
     case YELLOW:
-      value = SUBP_255[brightness];
-      value = value << 8;
-      value = value | SUBP_112[brightness];
-      value = value << 8;
-      break;
+      return (value << 16) | (SUBP_112[brightness] << 8);
     case GREEN:
-      value = SUBP_255[brightness];
-      value = value << 8;
-      break;
+      return value << 8;
     case BLUE:
-      value = SUBP_255[brightness];
-      break;
-    case INDIGO:
-      value = SUBP_255[brightness];
-      value = value << 16;
-      value = value | SUBP_80[brightness];
-      break;
+      return value;
+    default:
+      return (value << 16) | SUBP_80[brightness];
   }
-  return(value);
 }
 
