@@ -34,7 +34,7 @@ BCSCTL1 = XT2OFF | 0b00001111;
 P1DIR = ~(1 << BUTTON_PIN); 
 P1IFG = 0;           //Clear interrupts
 P1IES = 255;         //interrupt on falling edge
-P1IE  = 0b00001000;  //Intettupt only for S2 (P1.3)
+P1IE  = ~(1 << BUTTON_PIN);  //Intettupt only for S2 (P1.3)
 P1OUT = 0;
 
 //setup USI
