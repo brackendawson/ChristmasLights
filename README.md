@@ -16,9 +16,13 @@ include number of LEDs, selection of patterns and
 defaults. If you like, you can define your own
 patterns, see fade.h for a documented example.
 
+Install the FastSPI library (not version 2) from:
+https://code.google.com/p/fastspi/downloads/list
+By clicking Sketch > Import Library > Add Library...
+
 open ChristmasLights.ino in the Arduino IDE,
 select your board and serial port, then click
-download.
+upload.
 
 ======
 MSP430
