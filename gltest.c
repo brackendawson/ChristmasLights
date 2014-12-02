@@ -32,6 +32,7 @@ void cyclepattern();
  will transmit the whole string and then return. */
 void stringsend();
 
+void keyboard(unsigned char key, int x, int y);
 
 /*Dividers for the timing*/
 #define DIV1_WRAP 500         //1ms to 40ms
@@ -66,6 +67,7 @@ int main(int argc, char** argv) {
   glutDisplayFunc(display);
   //glutReshapeFunc(reshape);
   glutIdleFunc(loop);
+  glutKeyboardFunc((*keyboard));
   init();
   glutMainLoop();
 }
@@ -161,6 +163,12 @@ void cyclepattern(void) {
   }
   printf("Changed to pattern %d\n", current_pattern);
   return;
+}
+
+void keyboard(unsigned char key, int x, int y) {
+  if (key == ' ') {
+    rotate();
+  }
 }
 
 #endif
