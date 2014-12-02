@@ -53,6 +53,9 @@ void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+int timelow = 0;
+int timehigh = 0;
+
 int main(int argc, char** argv) {
   pattern_init();
   glutInit(&argc, argv);
@@ -89,6 +92,7 @@ void loop() {
 /* The function to send SPI data to the string, it
  will transmit the whole string and then return. */
 void stringsend() {
+  timelow = glutGet(GLUT_ELAPSED_TIME);
   glClear(GL_COLOR_BUFFER_BIT);
 
   float s = 500.0/NUM_LEDS;
@@ -109,6 +113,10 @@ void stringsend() {
   }
   glFlush();
   // printf("loop\n");
+  while (timehigh - timelow < 40) {
+    timehigh = glutGet(GLUT_ELAPSED_TIME);
+  }
+  timehigh = glutGet(GLUT_ELAPSED_TIME);
 }
 
 /* The function to move the pattens up 1 and enable/disable
