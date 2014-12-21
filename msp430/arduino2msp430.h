@@ -12,5 +12,5 @@ unsigned char msp430_noise_i = 0;
  function overloading we're only implimenting
  the two argument version. */
 long random(long min, long max) {
-  return min + (msp430_noise[msp430_noise_i++] % (max - min));
+  return min + (msp430_noise[msp430_noise_i++ % sizeof(msp430_noise)] % (max - min));
 }
