@@ -7,11 +7,12 @@ this file too... :-) */
 /* Number of LEDs in the string, up to 255 */
 #define NUM_LEDS	50
 
-/* Pin for mode button on MSP430 */
-#define BUTTON_PIN      3       //P1.3 (S2 on launchpad)
 /* Pin for mode button on arduino */
 #ifdef ARDUINO
 #define BUTTON_PIN      7
+#else
+/* Pin for mode button on MSP430 */
+#define BUTTON_PIN      3       //P1.3 (S2 on launchpad)
 #endif
 
 #ifndef ARDUINO

@@ -5,31 +5,23 @@ lights for a Christmas tree.
 
 Copyright 2012 - Bracken Dawson - Licensed under GPLv3.
 
-=======
-Arduino
-=======
-
-Installing
-----------
+# Arduino
+## Installing
 Edit configuration.h, it is commented. Settings
 include number of LEDs, selection of patterns and
 defaults. If you like, you can define your own
 patterns, see fade.h for a documented example.
 
 Install the FastSPI library (not version 2) from:
-https://code.google.com/p/fastspi/downloads/list
-By clicking Sketch > Import Library > Add Library...
+https://github.com/FastLED/FastLED
+By clicking Sketch > Include Library > Add .ZIP Library...
 
 open ChristmasLights.ino in the Arduino IDE,
 select your board and serial port, then click
 upload.
 
-======
-MSP430
-======
-
-Installing
-----------
+# MSP430
+## Installing
 Edit configuration.h, it is commented. Settings
 include number of LEDs, selection of patterns and
 defaults. If you can't compile in the space on your
@@ -48,8 +40,7 @@ and program the chip for you.
 If you are using some other programmer just use
 "make" and load lights.elf onto your chip.
 
-Minimum requirements
---------------------
+## Minimum requirements
  * 4KB program memory (8KB recommended).
  * 128B RAM (256B recommended).
  * DCO.
