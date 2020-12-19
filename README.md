@@ -12,7 +12,7 @@ include number of LEDs, selection of patterns and
 defaults. If you like, you can define your own
 patterns, see fade.h for a documented example.
 
-Install the FastSPI library (not version 2) from:
+Install the FastSPI library from:
 https://github.com/FastLED/FastLED
 By clicking Sketch > Include Library > Add .ZIP Library...
 
