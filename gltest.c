@@ -1,4 +1,5 @@
 /*
+ * export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig # if on mac
  * gcc -c -o gltest.o  gltest.c -std=c99 -Wall `pkg-config --cflags gl` -I.
  * gcc -o gltest gltest.o `pkg-config --libs gl` -lglut
  */
