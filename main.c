@@ -79,7 +79,6 @@ void rotate(void) {
     and go to static. */
     cycle = 0;
     current_pattern = 0;
-    pattern_init();
   } else {
     /* we are not in cycle mode,
     incriment mode or enable cycle
@@ -89,13 +88,12 @@ void rotate(void) {
       cycle from pattern 1. */
       cycle = 1;
       current_pattern = 1;
-      pattern_init();
     } else {
       current_pattern++;
-      pattern_init();
     }
   }
 
+  pattern_init();
   // Timer interrupt back on
   TA0CTL = TA0CTL + TAIE;
   return;
@@ -106,13 +104,19 @@ void cyclepattern(void) {
   if (!cycle) {
     return;
   }
+#ifdef CYCLE_RANDOMLY
+  unsigned char old = current_pattern;
+  while (old == current_pattern) {
+    current_pattern = random(1,NUM_PATTERNS+1);
+  }
+#else
   if (NUM_PATTERNS <= current_pattern) {
     current_pattern = 1;
-    pattern_init();
   } else {
     current_pattern++;
-    pattern_init();
   }
+#endif
+  pattern_init();
   return;
 }
 

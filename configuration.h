@@ -59,6 +59,7 @@ pattern patterns[] =
 unsigned char current_pattern = 1;	//default pattern, 0 is static
 #define CYCLE_TIME 300/0.04		//frames to display a pattern for in cycle mode, must be integer, for convinience say "seconds/0.04".
 bool cycle = 1;	        		//0 means default to not cycling, 1 means default to cycling from the default pattern
+#define CYCLE_RANDOMLY  //uncomment to cycle randomly through the patterns in cycle mode
 
 //No need to edit below this line
 //-------------------------------
