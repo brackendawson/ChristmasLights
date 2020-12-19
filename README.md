@@ -45,6 +45,9 @@ If you are using some other programmer just use
  * TimerA0.
  * USI.
 
+You will most likely need to disable at least two
+patterns to prevent the stack hitting the heap.
+
 I use the MSP430G2452 that comes with more recently
 shipped launchpad development boards.
 
