@@ -21,8 +21,12 @@ void colourtwinkle_frame(void) {
   }
   colourtwinkle_div = 0;
 
-  //set a random LED to a random colour
-  colourtwinkle_buffer[random(0,COLOURTWINKLE_ELEMENTS)] = (unsigned char) random(RED,INDIGO+1);
+  //choose a random led and set it to a random *new* colour 
+  unsigned char i = random(0,COLOURTWINKLE_ELEMENTS);
+  unsigned char old = colourtwinkle_buffer[i];
+  while (old == colourtwinkle_buffer[i]) {
+    colourtwinkle_buffer[i] = (unsigned char) random(RED,INDIGO+1);
+  }
   return;
 }
 
