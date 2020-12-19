@@ -3,8 +3,6 @@ gcc-msp430 toolchain (msp430 launchpad).
 It drives a WS2801 based string of RGB LEDs to create
 lights for a Christmas tree.
 
-Copyright 2012 - Bracken Dawson - Licensed under GPLv3.
-
 # Arduino
 ## Installing
 Edit configuration.h, it is commented. Settings
