@@ -31,11 +31,12 @@ DCOCTL = 0b11100000 | 0b00011111;
 BCSCTL1 = XT2OFF | 0b00001111;
 
 //setup GPIO
-P1DIR = ~(1 << BUTTON_PIN); 
-P1IFG = 0;           //Clear interrupts
-P1IES = 255;         //interrupt on falling edge
-P1IE  = ~(1 << BUTTON_PIN);  //Intettupt only for S2 (P1.3)
-P1OUT = 0;
+P1DIR = ~(1 << BUTTON_PIN); //Set S2 (P1.3) as input 
+P1REN = 1 << BUTTON_PIN;    //Set pullup
+P1OUT = 1 << BUTTON_PIN;    //Set pullup
+P1IE  = 1 << BUTTON_PIN;    //Intettupt only for S2 (P1.3)
+P1IES = 1 << BUTTON_PIN;    //interrupt on falling edge
+P1IFG = 0;                  //Clear P1 interrupts
 
 //setup USI
 //        edges     interrupt disabled and USIIFG cleared by this
@@ -212,7 +213,7 @@ __attribute__((interrupt(USI_VECTOR))) void USIServiceRoutine(void) {
   send();
 }
 
-/* This function shall be called when switch P1.3 (S1) is pressed down. */
+/* This function shall be called when switch P1.3 (S2) is pressed down. */
 __attribute__((interrupt(PORT1_VECTOR))) void Port1ServiceRoutine(void) {
   P1IFG = 0;
   rotate();
