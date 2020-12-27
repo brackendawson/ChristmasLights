@@ -24,11 +24,9 @@ void main(void) {
 WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
 USICTL0 = USISWRST;           // Stop spamming the USI during init
 
-/*setup clock, DCO to max DCO, about 25MHz */
-//       DCOx         MODx
-DCOCTL = 0b11100000 | 0b00011111;
-//        no xtal  RSELx
-BCSCTL1 = XT2OFF | 0b00001111;
+/*setup clock, DCO to calibrated 16MHz */
+DCOCTL = CALDCO_16MHZ;
+BCSCTL1 = CALBC1_16MHZ;
 
 //setup GPIO
 P1DIR = ~(1 << BUTTON_PIN); //Set S2 (P1.3) as input 
