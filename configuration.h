@@ -24,6 +24,15 @@ this file too... :-) */
 #define DCO_CAL_DIV	16
 #endif
 
+// General purpose memory for patterns to share.
+#define COMMON_BUFFER_SIZE 48 //bytes
+uint8_t common_buffer[COMMON_BUFFER_SIZE];
+
+// If an arbitrary length pattern repeats, repeat after this manty LEDs
+// If this number is set too small, then the repitition will look obvious. If
+// it is set too large, then the tree will have little activity and look boring.
+#define REPEAT_LENGTH 16
+
 //Patterns to include when compiling
 #include "static.h"	//removing static breaks cycle mode logic
 #include "fade.h"
@@ -40,7 +49,7 @@ this file too... :-) */
 typedef struct pattern_t {
   void (*init)();
   void (*frame)();
-  unsigned long (*get)(unsigned char);
+  uint32_t (*get)(uint8_t);
 } pattern;
 
 /* Add the patterns you wish to display into this structure
@@ -61,7 +70,7 @@ pattern patterns[] =
     { &tetris_init, &tetris_frame, &tetris_getled },
   };
 
-unsigned char current_pattern = 1;	//default pattern, 0 is static
+uint8_t current_pattern = 1;	//default pattern, 0 is static
 #define CYCLE_TIME 300/0.04		//frames to display a pattern for in cycle mode, must be integer, for convinience say "seconds/0.04".
 bool cycle = 1;	        		//0 means default to not cycling, 1 means default to cycling from the default pattern
 #define CYCLE_RANDOMLY  //uncomment to cycle randomly through the patterns in cycle mode
@@ -78,6 +87,6 @@ void frame(void) {
   patterns[current_pattern].frame();
 }
 
-unsigned long getled(unsigned char index) {
+uint32_t getled(uint8_t index) {
   return patterns[current_pattern].get(index);
 }

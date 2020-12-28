@@ -14,7 +14,8 @@
 #include <GL/glut.h>
 #endif
 
-typedef unsigned char bool;
+typedef uint8_t bool;
+#define static_assert _Static_assert
 
 /* Macro to match arduino function. */
 #define random(MIN,MAX) ((MIN)+(rand()%((MAX)-(MIN))))
@@ -99,7 +100,7 @@ void stringsend() {
 
   float s = 500.0/NUM_LEDS;
   for(int i = 0 ; i < NUM_LEDS; i++ ) {
-    unsigned long current_led = getled(i);
+    uint32_t current_led = getled(i);
     float r = ((current_led >> 16)&0xff)/255.0;
     float g = ((current_led >> 8)&0xff)/255.0;
     float b = (current_led&0xff)/255.0;
@@ -153,7 +154,7 @@ void cyclepattern(void) {
     return;
   }
 #ifdef CYCLE_RANDOMLY
-  unsigned char old = current_pattern;
+  uint8_t old = current_pattern;
   while (old == current_pattern) {
     current_pattern = random(1,NUM_PATTERNS+1);
   }

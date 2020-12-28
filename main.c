@@ -1,23 +1,24 @@
 #ifndef ARDUINO
 #include <msp430.h>
+#include <stdint.h>
 #include "msp430/arduino2msp430.h"
 #include "colours.h"
 #include "configuration.h"
 
 //stuff for USI
-unsigned char led_index;
+uint8_t led_index;
 //USI states
 #define USI_IDLE	0	//USI not transmitting, USIIE is off
 #define USI_TXRED	1	//USI is/was transmitting RED sub-pixel for LED[index]
 #define USI_TXGREEN	2       //USI is/was transmitting GREEN sub-pixel for LED[index]
 #define USI_TXBLUE	3	//USI is/was transmitting BLUE sub-pixel for LED[index]
-unsigned char usi_state = USI_IDLE;
+uint8_t usi_state = USI_IDLE;
 
 //Timer devider
-unsigned char timera_div = 0; //to DCO_CAL_DIV
+uint8_t timera_div = 0; //to DCO_CAL_DIV
 
 //Pattern cycle divider
-unsigned int cycle_div = 0; //to CYCLE_TIME
+uint16_t cycle_div = 0; //to CYCLE_TIME
 
 void main(void) {
 
@@ -104,7 +105,7 @@ void cyclepattern(void) {
     return;
   }
 #ifdef CYCLE_RANDOMLY
-  unsigned char old = current_pattern;
+  uint8_t old = current_pattern;
   while (old == current_pattern) {
     current_pattern = random(1,NUM_PATTERNS+1);
   }

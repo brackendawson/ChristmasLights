@@ -1,10 +1,10 @@
 /* Global definitions for this pattern, must be unique, it
 is a good idea to prefix the pattern name. */
-unsigned char firework_pos;
-unsigned char firework_exp_pos;
-unsigned char firework_col;
-unsigned long firework_exp_col;
-unsigned char firework_size;
+uint8_t firework_pos;
+uint8_t firework_exp_pos;
+uint8_t firework_col;
+uint32_t firework_exp_col;
+uint8_t firework_size;
 enum firework_states {
   LAUNCHED = 1,
   EXPLODED = 2
@@ -24,8 +24,8 @@ void firework_init(void) {
   return;
 }
 
-unsigned char percent(unsigned int n, unsigned char d) {
-  unsigned char r = 0;
+uint8_t percent(uint16_t n, uint8_t d) {
+  uint8_t r = 0;
   n *= 100;
   while (n >= d) {
     n -= d;
@@ -40,7 +40,7 @@ efficient, if it takes too long P1.0 output will be set
 to 1 (red LED on launchpad). Prefixed with pattern name. */
 void firework_frame(void) {
   /* colour(colour, brightness) is a useful helper function,
-    it will retrun the 24 bit RGB value as unsigned long for
+    it will retrun the 24 bit RGB value as uint32_t for
     a colour defined in ../colours.h and brightness from 0
     to 99 as unsigned char. */
   if (firework_state == LAUNCHED) {
@@ -69,17 +69,17 @@ void firework_frame(void) {
 /* getled function for this pattern called many times in no
 guarented order, but always after the frame function has
 finished.
-Will be passed and unsigned char representing an LED index,
-you must return the 24bit RGB value as unsigned long for that
+Will be passed and uint8_t representing an LED index,
+you must return the 24bit RGB value as uint32_t for that
 LED. Your pattern should handle as many LEDs as are defined by
 NUM_LEDS, that's up to 255.
 Prefixed with pattern name. */
-unsigned long firework_getled(unsigned char led) {
+uint32_t firework_getled(uint8_t led) {
   if (firework_state == LAUNCHED) {
     return firework_pos == led ? 0xff7f7f : 0x000000;
   } else {
-    for (unsigned char i = 0; i < 3; i++) {
-      unsigned char offset = firework_pos >> i;
+    for (uint8_t i = 0; i < 3; i++) {
+      uint8_t offset = firework_pos >> i;
       if (led == firework_exp_pos+offset || led+offset == firework_exp_pos) {
         return firework_exp_col;
       }

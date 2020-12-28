@@ -1,7 +1,7 @@
 //Definitions for this pattern
 bool chameleon_dir;
-unsigned char chameleon_brightness;
-unsigned char chameleon_colour;
+uint8_t chameleon_brightness;
+uint8_t chameleon_colour;
 
 //functions for this pattern
 
@@ -34,7 +34,7 @@ void chameleon_frame(void) {
 }
 
 //getled function
-unsigned long chameleon_getled(unsigned char led) {
-  unsigned long col = colour(chameleon_colour, chameleon_brightness);
+uint32_t chameleon_getled(uint8_t led) {
+  uint32_t col = colour(chameleon_colour, chameleon_brightness);
   return(col);
 }
