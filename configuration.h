@@ -28,13 +28,14 @@ can be used to adjust the speed of the program. */
 #define DCO_CAL_DIV	160
 #endif
 
-// General purpose memory for patterns to share.
-#define COMMON_BUFFER_SIZE 48 //bytes
-uint8_t common_buffer[COMMON_BUFFER_SIZE];
+/* General purpose memory for patterns to share.
+You can reduce the size of this memory segment if you disable some of the
+larger patterns. Compilation will fail if this is set too small. */
+uint8_t common_buffer[48];
 
-// If an arbitrary length pattern repeats, repeat after this manty LEDs
-// If this number is set too small, then the repitition will look obvious. If
-// it is set too large, then the tree will have little activity and look boring.
+/* If an arbitrary length pattern repeats, repeat after this manty LEDs
+If this number is set too small, then the repitition will look obvious. If it
+is set too large, then the tree will have little activity and look boring. */
 #define REPEAT_LENGTH 16
 
 //Patterns to include when compiling
