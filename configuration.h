@@ -16,12 +16,11 @@ this file too... :-) */
 #endif
 
 #ifndef ARDUINO
-/* MSP430 only, Timer calibration, if the patterns are
- too fast, make this larger. Not all MSP430s were
- created equal and few come with larger than a 1MHz
- calibration data. The Cycle time defined by
- CYCLE_TIME is a good thing to test against. */
-#define DCO_CAL_DIV	16
+/* MSP430 only, Timer calibration.
+This sets the frame time to 40ms (25fps) assuming the intarnal timers tick
+every 250µs and the clock is 16MHz. If that's not the case, then this divider
+can be used to adjust the speed of the program. */
+#define DCO_CAL_DIV	160
 #endif
 
 // General purpose memory for patterns to share.

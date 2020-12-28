@@ -40,7 +40,7 @@ P1IFG = 0;                  //Clear P1 interrupts
 //setup USI
 //        edges     interrupt disabled and USIIFG cleared by this
 USICTL1 = USICKPH;
-//         SMCLK       /8
+//         SMCLK       /8 (2MHz assuming a 16MHz SMCLK)
 USICKCTL = USISSEL_2 | USIDIV_3;
 //        Output and clk    output enable   master    this reanables the USI by clearning USISWRST
 USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;
@@ -56,8 +56,8 @@ pattern_init();
 
 //enable maskable interrupts globaly
 WRITE_SR(GIE);
-// starts timer, aiming for 250us 
-TA0CCR0 = 0x186A;
+// starts timer, aiming for 250µs assuming a 16Mhz SMCLK 
+TA0CCR0 = 0x01f4;
 
 /* Go into Low power mode , main stops here.
 CPU, MCLK are disabled, SMCLK, ACLK  and DCO
@@ -160,7 +160,7 @@ void send(void) {
 }
 
 /* This function shall be called very roughly every
-1 milisecond, one cycle before TimerA1ServerRoutine
+250µs, one cycle before TimerA1ServerRoutine
 is called. It shall also be called while that service
 routine is running. This means I can use it to
 increment timera_div. */
@@ -177,7 +177,7 @@ __attribute__((interrupt(TIMER0_A0_VECTOR))) void TimerA0ServiceRoutine(void) {
 }
 
 /* This function shall be called very roughly every
-1 milisecond. Using this every somethingth iteration
+250µs. Using this every somethingth iteration
 gives 25 times per second. Calibrate with DCO_CAL_DIV*/
 __attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
   TA0CTL = TA0CTL - TAIFG; //reset Timer A interrupt flag
