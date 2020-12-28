@@ -1,46 +1,52 @@
 #ifndef ARDUINO
 #include <msp430.h>
+#include <stdint.h>
 #include "msp430/arduino2msp430.h"
 #include "colours.h"
 #include "configuration.h"
 
 //stuff for USI
-unsigned char led_index;
+uint8_t led_index;
 //USI states
 #define USI_IDLE	0	//USI not transmitting, USIIE is off
 #define USI_TXRED	1	//USI is/was transmitting RED sub-pixel for LED[index]
 #define USI_TXGREEN	2       //USI is/was transmitting GREEN sub-pixel for LED[index]
 #define USI_TXBLUE	3	//USI is/was transmitting BLUE sub-pixel for LED[index]
-unsigned char usi_state = USI_IDLE;
+uint8_t usi_state = USI_IDLE;
 
 //Timer devider
-unsigned char timera_div = 0; //to DCO_CAL_DIV
+uint8_t timera_div = 0; //to DCO_CAL_DIV
 
 //Pattern cycle divider
-unsigned int cycle_div = 0; //to CYCLE_TIME
+uint16_t cycle_div = 0; //to CYCLE_TIME
 
 void main(void) {
 
-WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
+BCSCTL3 = LFXT1S_2; // ACLK from VLO
+#ifdef DISABLE_WATCHDOG
+WDTCTL = WDTPW | WDTHOLD; // Stop WDT
+#else
+WDTCTL = WDT_ARST_1000;   // Pet WDT
+#endif
+
 USICTL0 = USISWRST;           // Stop spamming the USI during init
 
-/*setup clock, DCO to max DCO, about 25MHz */
-//       DCOx         MODx
-DCOCTL = 0b11100000 | 0b00011111;
-//        no xtal  RSELx
-BCSCTL1 = XT2OFF | 0b00001111;
+/*setup clock, DCO to calibrated 16MHz */
+DCOCTL = CALDCO_16MHZ;
+BCSCTL1 = CALBC1_16MHZ;
 
 //setup GPIO
-P1DIR = ~(1 << BUTTON_PIN); 
-P1IFG = 0;           //Clear interrupts
-P1IES = 255;         //interrupt on falling edge
-P1IE  = ~(1 << BUTTON_PIN);  //Intettupt only for S2 (P1.3)
-P1OUT = 0;
+P1DIR = ~(1 << BUTTON_PIN); //Set S2 (P1.3) as input 
+P1REN = 1 << BUTTON_PIN;    //Set pullup
+P1OUT = 1 << BUTTON_PIN;    //Set pullup
+P1IE  = 1 << BUTTON_PIN;    //Intettupt only for S2 (P1.3)
+P1IES = 1 << BUTTON_PIN;    //interrupt on falling edge
+P1IFG = 0;                  //Clear P1 interrupts
 
 //setup USI
 //        edges     interrupt disabled and USIIFG cleared by this
 USICTL1 = USICKPH;
-//         SMCLK       /8
+//         SMCLK       /8 (2MHz assuming a 16MHz SMCLK)
 USICKCTL = USISSEL_2 | USIDIV_3;
 //        Output and clk    output enable   master    this reanables the USI by clearning USISWRST
 USICTL0 = USIPE6 | USIPE5 | USIOE         | USIMST;
@@ -56,8 +62,8 @@ pattern_init();
 
 //enable maskable interrupts globaly
 WRITE_SR(GIE);
-// starts timer, aiming for 250us 
-TA0CCR0 = 0x186A;
+// starts timer, aiming for 250µs assuming a 16Mhz SMCLK 
+TA0CCR0 = 0x01f4;
 
 /* Go into Low power mode , main stops here.
 CPU, MCLK are disabled, SMCLK, ACLK  and DCO
@@ -105,7 +111,7 @@ void cyclepattern(void) {
     return;
   }
 #ifdef CYCLE_RANDOMLY
-  unsigned char old = current_pattern;
+  uint8_t old = current_pattern;
   while (old == current_pattern) {
     current_pattern = random(1,NUM_PATTERNS+1);
   }
@@ -160,7 +166,7 @@ void send(void) {
 }
 
 /* This function shall be called very roughly every
-1 milisecond, one cycle before TimerA1ServerRoutine
+250µs, one cycle before TimerA1ServerRoutine
 is called. It shall also be called while that service
 routine is running. This means I can use it to
 increment timera_div. */
@@ -177,7 +183,7 @@ __attribute__((interrupt(TIMER0_A0_VECTOR))) void TimerA0ServiceRoutine(void) {
 }
 
 /* This function shall be called very roughly every
-1 milisecond. Using this every somethingth iteration
+250µs. Using this every somethingth iteration
 gives 25 times per second. Calibrate with DCO_CAL_DIV*/
 __attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
   TA0CTL = TA0CTL - TAIFG; //reset Timer A interrupt flag
@@ -200,6 +206,16 @@ __attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
     cyclepattern();
   }
 
+  /* Pet the watchdog
+    __      _
+  o'')}____//
+   `_/      )
+   (_(_/-(_/
+  */
+#ifndef DISABLE_WATCHDOG
+  WDTCTL = WDT_ARST_1000;
+#endif
+
   frame();   //triggers the current pattern to generate the next frame
 
   send();  //MUST BE AFTER FRAME FUNCTION IN PATTERN! MUST FINISH SENDING BEFORE NEXT CALL OF FRAME FUNCTION;
@@ -212,7 +228,7 @@ __attribute__((interrupt(USI_VECTOR))) void USIServiceRoutine(void) {
   send();
 }
 
-/* This function shall be called when switch P1.3 (S1) is pressed down. */
+/* This function shall be called when switch P1.3 (S2) is pressed down. */
 __attribute__((interrupt(PORT1_VECTOR))) void Port1ServiceRoutine(void) {
   P1IFG = 0;
   rotate();

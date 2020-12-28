@@ -1,6 +1,6 @@
 //Definitions for this pattern
-  unsigned int run_index;
-  unsigned char run_colour;
+uint8_t run_index;
+uint8_t run_colour;
 
 //functions for this pattern
 
@@ -25,7 +25,7 @@ void run_frame(void) {
 }
 
 //getled function
-unsigned long run_getled(unsigned char led) {
+uint32_t run_getled(uint8_t led) {
   if (led == run_index) {
     return(colour(run_colour,99));
   } else if (led == run_index - 1) {

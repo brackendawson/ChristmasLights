@@ -1,8 +1,8 @@
 /* Global definitions for this pattern, must be unique, it
 is a good idea to prefix the pattern name. */
-unsigned char pacman_pos;
+uint8_t pacman_pos;
 bool pacman_dir;
-unsigned char pacman_slow;
+uint8_t pacman_slow;
 
 /* Private functions for this pattern, if you need any.
 Make the names unique. */
@@ -23,7 +23,7 @@ efficient, if it takes too long P1.0 output will be set
 to 1 (red LED on launchpad). Prefixed with pattern name. */
 void pacman_frame(void) {
   /* colour(colour, brightness) is a useful helper function,
-    it will retrun the 24 bit RGB value as unsigned long for
+    it will retrun the 24 bit RGB value as uint32_t for
     a colour defined in ../colours.h and brightness from 0
     to 99 as unsigned char. */
   if (pacman_slow++ < 8) {
@@ -50,12 +50,12 @@ void pacman_frame(void) {
 /* getled function for this pattern called many times in no
 guarented order, but always after the frame function has
 finished.
-Will be passed and unsigned char representing an LED index,
-you must return the 24bit RGB value as unsigned long for that
+Will be passed and uint8_t representing an LED index,
+you must return the 24bit RGB value as uint32_t for that
 LED. Your pattern should handle as many LEDs as are defined by
 NUM_LEDS, that's up to 255.
 Prefixed with pattern name. */
-unsigned long pacman_getled(unsigned char led) {
+uint32_t pacman_getled(uint8_t led) {
   if (pacman_pos == led) {
     return 0xff7a00; // pacman
   }

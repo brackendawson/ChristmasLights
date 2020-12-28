@@ -1,7 +1,9 @@
-This is a C program compilable with arduino and the
-gcc-msp430 toolchain (msp430 launchpad).
-It drives a WS2801 based string of RGB LEDs to create
-lights for a Christmas tree.
+This is a C program compilable with Arduino and TI MSP430 Launchpad. It drives
+a WS2801 based string of RGB LEDs to create lights for a Christmas tree.
+
+The MSP430 version uses the msp430-gcc toolchain and only works with WS2801
+pixels. The Arduino version can be used with any LED type supported by the
+FastLED library.
 
 # Arduino
 ## Installing
@@ -18,6 +20,11 @@ open ChristmasLights.ino in the Arduino IDE,
 select your board and serial port, then click
 upload.
 
+## Wiring
+* Clock -> pin 13
+* Data -> pin 11
+* Button -> pin 7 (optional)
+
 # MSP430
 ## Installing
 Edit configuration.h, it is commented. Settings
@@ -27,27 +34,30 @@ MSP430, you might try taking out some patterns. If
 you like, you can define your own patterns, see
 fade.h for a documented example.
 
-You require the mspgcc toolchain, version
-mspgcc-20120406 works, as does the gcc-msp430 package
-in ubuntu from 12.10 and up). YOu also need a tool to
-program the chip such as mspdebug or msp430-gdbproxy.
+You require the msp430-gcc toolchain and mspdebug, both available on Ubuntu.
+Connect the launchpad to your computer, make sure you are in the `tty` and
+`dialout` groups and run `make prog` to program the chip.
 
-If you are using mspdebug; "make prog" will compile
-and program the chip for you.
-
-If you are using some other programmer just use
-"make" and load lights.elf onto your chip.
+## Wiring
+* Clock -> P1.5
+* Data -> P1.6 (LED2, remove J5 P1.6 if you have issues with the lights)
+* Button -> P1.3 (S2, optional)
+* Error LED -> P1.0 (LED1, optional)
 
 ## Minimum requirements
- * 4KB program memory (8KB recommended).
- * 128B RAM (256B recommended).
- * DCO.
- * TimerA0.
- * USI.
+Works out of the box on MSP430G2452. With modification can run on other chips:
 
-You will most likely need to disable at least two
-patterns to prevent the stack hitting the heap.
+Recommended:
+ * 8KB program memory
+ * 256B RAM
+ * DCO
+ * TimerA
+ * USI
+ * WDT
 
-I use the MSP430G2452 that comes with more recently
-shipped launchpad development boards.
-
+ Minimum (will require some patterns to be disabled):
+ * 2KB program memory
+ * 128B RAM
+ * DCO
+ * TimerA
+ * USI

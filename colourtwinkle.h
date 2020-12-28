@@ -1,14 +1,14 @@
-#define COLOURTWINKLE_ELEMENTS 16
-unsigned char colourtwinkle_buffer[COLOURTWINKLE_ELEMENTS];
-unsigned char colourtwinkle_div;
+uint8_t (*colourtwinkle_buffer)[REPEAT_LENGTH] = (uint8_t(*)[REPEAT_LENGTH]) &common_buffer;
+static_assert(sizeof(*colourtwinkle_buffer) <= sizeof(common_buffer), "colourtwinkle_buffer must fit in common_buffer");
+uint8_t colourtwinkle_div;
 
 //functions for this pattern
 
 //init function
 void colourtwinkle_init(void) {
   colourtwinkle_div = 0;
-  for (unsigned char i = 0; i < COLOURTWINKLE_ELEMENTS; i++) {
-    colourtwinkle_buffer[i] = (unsigned char) random(RED,INDIGO+1); //random()'s max argument is exclusive
+  for (uint8_t i = 0; i < REPEAT_LENGTH; i++) {
+    (*colourtwinkle_buffer)[i] = (uint8_t) random(RED,INDIGO+1); //random()'s max argument is exclusive
   }
   return;
 }
@@ -22,15 +22,15 @@ void colourtwinkle_frame(void) {
   colourtwinkle_div = 0;
 
   //choose a random led and set it to a random *new* colour 
-  unsigned char i = random(0,COLOURTWINKLE_ELEMENTS);
-  unsigned char old = colourtwinkle_buffer[i];
-  while (old == colourtwinkle_buffer[i]) {
-    colourtwinkle_buffer[i] = (unsigned char) random(RED,INDIGO+1);
+  uint8_t i = random(0,REPEAT_LENGTH);
+  uint8_t old = (*colourtwinkle_buffer)[i];
+  while (old == (*colourtwinkle_buffer)[i]) {
+    (*colourtwinkle_buffer)[i] = (uint8_t) random(RED,INDIGO+1);
   }
   return;
 }
 
 //getled function
-unsigned long colourtwinkle_getled(unsigned char led) {
-  return colour(colourtwinkle_buffer[led % COLOURTWINKLE_ELEMENTS], 99);
+uint32_t colourtwinkle_getled(uint8_t led) {
+  return colour((*colourtwinkle_buffer)[led % REPEAT_LENGTH], 99);
 }
