@@ -1,6 +1,6 @@
 //Definitions for this pattern
 uint32_t (*static_buffer)[6] = (uint32_t(*)[6]) &common_buffer;
-static_assert(sizeof(static_buffer) <= sizeof(common_buffer), "static_buffer must fit in common_buffer");
+static_assert(sizeof(*static_buffer) <= sizeof(common_buffer), "static_buffer must fit in common_buffer");
 
 //functions for this pattern
 

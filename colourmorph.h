@@ -1,5 +1,5 @@
 uint8_t (*colourmorph_buffer)[REPEAT_LENGTH] = (uint8_t(*)[REPEAT_LENGTH]) &common_buffer;
-static_assert(sizeof(colourmorph_buffer) <= sizeof(common_buffer), "colourmorph_buffer must fit in common_buffer");
+static_assert(sizeof(*colourmorph_buffer) <= sizeof(common_buffer), "colourmorph_buffer must fit in common_buffer");
 uint8_t colourmorph_div;
 uint8_t colourmorph_cur;
 uint8_t colourmorph_morphed;

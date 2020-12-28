@@ -1,6 +1,6 @@
 //Definitions for this pattern
 uint32_t (*wave_buffer)[12] = (uint32_t(*)[12]) &common_buffer;
-static_assert(sizeof(wave_buffer) <= sizeof(common_buffer), "wave_buffer must fit in common_buffer");
+static_assert(sizeof(*wave_buffer) <= sizeof(common_buffer), "wave_buffer must fit in common_buffer");
 uint8_t wave_fade_a;
 uint8_t wave_fade_b;
 uint8_t wave_col_a;
