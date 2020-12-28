@@ -15,6 +15,11 @@ this file too... :-) */
 #define BUTTON_PIN      3       //P1.3 (S2 on launchpad)
 #endif
 
+/* On MSP430 there is a ~1 second wartdog serviced between frames, if a
+pattern takes longer than this to render a frame, the CPU will reset. Unless
+you uncomment this. */
+//#define DISABLE_WATCHDOG
+
 #ifndef ARDUINO
 /* MSP430 only, Timer calibration.
 This sets the frame time to 40ms (25fps) assuming the intarnal timers tick

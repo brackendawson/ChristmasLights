@@ -22,7 +22,13 @@ uint16_t cycle_div = 0; //to CYCLE_TIME
 
 void main(void) {
 
-WDTCTL = WDTPW | WDTHOLD;     // Stop WDT
+BCSCTL3 = LFXT1S_2; // ACLK from VLO
+#ifdef DISABLE_WATCHDOG
+WDTCTL = WDTPW | WDTHOLD; // Stop WDT
+#else
+WDTCTL = WDT_ARST_1000;   // Pet WDT
+#endif
+
 USICTL0 = USISWRST;           // Stop spamming the USI during init
 
 /*setup clock, DCO to calibrated 16MHz */
@@ -199,6 +205,16 @@ __attribute__((interrupt(TIMER0_A1_VECTOR))) void TimerA1ServerRoutine(void) {
     //time to move the pattern up if we are cycling
     cyclepattern();
   }
+
+  /* Pet the watchdog
+    __      _
+  o'')}____//
+   `_/      )
+   (_(_/-(_/
+  */
+#ifndef DISABLE_WATCHDOG
+  WDTCTL = WDT_ARST_1000;
+#endif
 
   frame();   //triggers the current pattern to generate the next frame
 
