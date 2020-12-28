@@ -35,10 +35,10 @@ void colourmorph_frame(void) {
   }
 
   //choose a random current color led and set it to the next colour
-  uint8_t i;
-  do {
-    i = random(0, REPEAT_LENGTH);
-  } while (colourmorph_cur != (*colourmorph_buffer)[i]);
+  uint8_t i = random(0, REPEAT_LENGTH);
+  while (colourmorph_cur != (*colourmorph_buffer)[i]) {
+    i = (i+1)%REPEAT_LENGTH;
+  }
   (*colourmorph_buffer)[i] = (colourmorph_cur + 1);
   if ((*colourmorph_buffer)[i] > INDIGO) {
     (*colourmorph_buffer)[i] = RED;
