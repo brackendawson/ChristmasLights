@@ -1,11 +1,15 @@
 CC=msp430-gcc
-CFLAGS=-Os -Wall -g -mmcu=msp430g2452 -std=c99 -Wl,-Map=lights.map
+MCU=msp430g2452
+CFLAGS=-Os -Wall -g -mmcu=$(MCU) -std=c99 -Wl,-Map=lights.map
 
 NAME=lights
 
 OBJS=main.o
 
-all: $(OBJS)
+.PHONY: all
+all: $(NAME).elf
+
+$(NAME).elf: $(OBJS)
 	$(CC) $(CFLAGS) -o $(NAME).elf $(OBJS)
 	msp430-size $(NAME).elf
 
@@ -14,7 +18,7 @@ all: $(OBJS)
 
 .PHONY : clean
 clean:
-	rm -fr $(NAME).elf $(OBJS)
+	rm -fr $(NAME).elf $(OBJS) lights.map
 
 .PHONY : prog
 prog: all

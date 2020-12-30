@@ -1,4 +1,4 @@
-bool (*twinkle_buffer)[REPEAT_LENGTH] = (bool(*)[16]) &common_buffer;
+static bool (*twinkle_buffer)[REPEAT_LENGTH] = (bool(*)[16]) &common_buffer;
 static_assert(sizeof(*twinkle_buffer) <= sizeof(common_buffer), "twinkle_buffer must fit in common_buffer");
 #define TWINKLE_ON	0x00FFFFFF
 #define TWINKLE_OFF	0x00000000

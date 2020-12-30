@@ -8,7 +8,7 @@ typedef struct {
   uint8_t pos;
 } tetris_piece;
 
-tetris_piece (*tetris_pieces)[TETRIS_PIECES] = (tetris_piece(*)[TETRIS_PIECES]) &common_buffer;
+static tetris_piece (*tetris_pieces)[TETRIS_PIECES] = (tetris_piece(*)[TETRIS_PIECES]) &common_buffer;
 static_assert(sizeof(*tetris_pieces) <= sizeof(common_buffer), "tetris_pieces must fit in common_buffer");
 uint8_t tetris_div;
 uint8_t tetris_gap;

@@ -60,7 +60,7 @@ typedef struct pattern_t {
 /* Add the patterns you wish to display into this structure
  in the order you want to see them static must be the first
  element. */
-pattern patterns[] =
+static const pattern patterns[] =
   {
     { &static_init, &static_frame, &static_getled }, // keep static first
     { &fade_init, &fade_frame, &fade_getled },

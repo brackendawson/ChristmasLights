@@ -5,7 +5,7 @@ bool fade_pat_dir;
 
 // this buffer is a pointer directed to the memory address of common_buffer,
 // even though they are different types, to save memory. Do check it fits.
-uint32_t (*fade_buffer)[6] = (uint32_t(*)[6]) &common_buffer;
+static uint32_t (*fade_buffer)[6] = (uint32_t(*)[6]) &common_buffer;
 static_assert(sizeof(*fade_buffer) <= sizeof(common_buffer), "fade_buffer must fit in common_buffer");
 
 /* Private functions for this pattern, if you need any.

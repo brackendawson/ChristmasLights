@@ -8,6 +8,7 @@
 *.so
 *.elf
 *.hex
+*.map
 
 # Packages #
 ############

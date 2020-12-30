@@ -1,4 +1,4 @@
-uint8_t (*colourtwinkle_buffer)[REPEAT_LENGTH] = (uint8_t(*)[REPEAT_LENGTH]) &common_buffer;
+static uint8_t (*colourtwinkle_buffer)[REPEAT_LENGTH] = (uint8_t(*)[REPEAT_LENGTH]) &common_buffer;
 static_assert(sizeof(*colourtwinkle_buffer) <= sizeof(common_buffer), "colourtwinkle_buffer must fit in common_buffer");
 uint8_t colourtwinkle_div;
 
