@@ -87,3 +87,25 @@ uint32_t firework_getled(uint8_t led) {
   }
   return 0x000000;
 }
+
+/* An alternate firework pattern without the rocket visible. */
+void firework_b_init(void) {
+  firework_pos = 0;
+  firework_state = EXPLODED;
+  firework_col = random(1,NUM_COLOURS); //max argument on random is exclusive, min is inclusive
+  firework_size = random(10,20);
+  firework_exp_col =
+    colour(firework_col, percent(firework_size-firework_pos,firework_size));
+  firework_exp_pos = random(firework_size/2, NUM_LEDS-(firework_size/2));
+  return;
+}
+
+void firework_b_frame(void) {
+  if (firework_pos == firework_size) {
+    firework_b_init();
+  } else {
+    firework_pos++;
+    firework_exp_col =
+      colour(firework_col, percent(firework_size-firework_pos,firework_size));
+  }
+}

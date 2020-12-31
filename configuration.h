@@ -70,6 +70,7 @@ static const pattern patterns[] =
     { &twinkle_init, &twinkle_frame, &twinkle_getled },
     { &pacman_init, &pacman_frame, &pacman_getled },
     { &firework_init, &firework_frame, &firework_getled },
+    // { &firework_b_init, &firework_b_frame, &firework_getled }, // An alternate firework with no rocket
     { &colourtwinkle_init, &colourtwinkle_frame, &colourtwinkle_getled },
     { &colourmorph_init, &colourmorph_frame, &colourmorph_getled },
     { &tetris_init, &tetris_frame, &tetris_getled },
