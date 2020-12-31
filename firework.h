@@ -20,7 +20,8 @@ with the pattern name. */
 void firework_init(void) {
   firework_pos = 0;
   firework_state = LAUNCHED;
-  firework_exp_pos = random((NUM_LEDS>>1), NUM_LEDS-10);
+  firework_size = random(10,20);
+  firework_exp_pos = random((NUM_LEDS>>1), NUM_LEDS-(firework_size>>1));
   return;
 }
 
@@ -48,7 +49,6 @@ void firework_frame(void) {
       firework_state = EXPLODED;
       firework_pos = 0; // size of explosion
       firework_col = random(1,NUM_COLOURS); //max argument on random is exclusive, min is inclusive
-      firework_size = random(10,20);
       firework_exp_col =
         colour(firework_col, percent(firework_size-firework_pos,firework_size));
     } else {
