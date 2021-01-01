@@ -132,21 +132,24 @@ a transmission, or by USIServerRoutine()
 when a sub-pixel transmission finishes and
 it's time for another 8 bytes. */
 void send(void) {
+  static uint32_t pixel;
+
   switch (usi_state) {
     case USI_IDLE:
       led_index = 0;
-      USISRL = getled(led_index) >> 16;	//load red byte into SPI buffer
+      pixel = getled(led_index);
+      USISRL = pixel >> 16;	//load red byte into SPI buffer
       USICTL1 = USICTL1 + USIIE;	//enable interrupt on tx completion
       USICNT = 8;			//Start send of 8 bits
       usi_state = USI_TXRED;
       return;
     case USI_TXRED:
-      USISRL = getled(led_index) >> 8;	//load green byte into SPI buffer
+      USISRL = pixel >> 8;	//load green byte into SPI buffer
       USICNT = 8;
       usi_state = USI_TXGREEN;
       return;
     case USI_TXGREEN:
-      USISRL = getled(led_index);	//load blue byte into SPI buffer
+      USISRL = pixel;	//load blue byte into SPI buffer
       USICNT = 8;
       usi_state = USI_TXBLUE;
       return;
@@ -157,7 +160,8 @@ void send(void) {
         usi_state = USI_IDLE;
         return;
       } else {
-        USISRL = getled(led_index) >> 16;	//load red byte into SPI buffer
+        pixel = getled(led_index);
+        USISRL = pixel >> 16;	//load red byte into SPI buffer
         USICNT = 8;				//Start send of 8 bits
         usi_state = USI_TXRED;
         return;
