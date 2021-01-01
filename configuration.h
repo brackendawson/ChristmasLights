@@ -31,7 +31,7 @@ can be used to adjust the speed of the program. */
 /* General purpose memory for patterns to share.
 You can reduce the size of this memory segment if you disable some of the
 larger patterns. Compilation will fail if this is set too small. */
-uint8_t common_buffer[48];
+uint8_t common_buffer[24];
 
 /* If an arbitrary length pattern repeats, repeat after this many LEDs
 If this number is set too small, then the repitition will look obvious. If it
