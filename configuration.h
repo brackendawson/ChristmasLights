@@ -4,7 +4,9 @@ this file too... :-) */
 
 /* MSP430 only, remember to set your MCU in the Makefile */
 
-/* Number of LEDs in the string, up to 255 */
+/* Number of LEDs in the string, up to 255. You will need to increase the size
+of common_buffer if you increase NUM_LEDS, depending on the patterns you have
+enabled. */
 #define NUM_LEDS	50
 
 /* Pin for mode button on arduino */
@@ -50,6 +52,7 @@ is set too large, then the tree will have little activity and look boring. */
 #include "colourtwinkle.h"
 #include "colourmorph.h"
 #include "tetris.h"
+#include "candle.h"
 
 typedef struct pattern_t {
   void (*init)();
@@ -74,6 +77,7 @@ static const pattern patterns[] =
     { &colourtwinkle_init, &colourtwinkle_frame, &colourtwinkle_getled },
     { &colourmorph_init, &colourmorph_frame, &colourmorph_getled },
     { &tetris_init, &tetris_frame, &tetris_getled },
+    { &candle_init, &candle_frame, &candle_getled },
   };
 
 uint8_t current_pattern = 1;	//default pattern, 0 is static
