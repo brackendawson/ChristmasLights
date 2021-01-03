@@ -100,10 +100,10 @@ void stringsend() {
 
   float s = 500.0/NUM_LEDS;
   for(int i = 0 ; i < NUM_LEDS; i++ ) {
-    uint32_t current_led = getled(i);
-    float r = ((current_led >> 16)&0xff)/255.0;
-    float g = ((current_led >> 8)&0xff)/255.0;
-    float b = (current_led&0xff)/255.0;
+    rgb24 current_led = getled(i);
+    float r = current_led.r/255.0;
+    float g = current_led.g/255.0;
+    float b = current_led.b/255.0;
     
     //printf("%d %06x = [%f, %f, %f]\n", i, (unsigned int)current_led, r, g, b);
     glBegin(GL_POLYGON);

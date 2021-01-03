@@ -49,6 +49,6 @@ void colourmorph_frame(void) {
 }
 
 //getled function
-uint32_t colourmorph_getled(uint8_t led) {
+rgb24 colourmorph_getled(uint8_t led) {
   return colour((*colourmorph_buffer)[led % REPEAT_LENGTH], 99);
 }

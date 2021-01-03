@@ -57,7 +57,7 @@ is set too large, then the tree will have little activity and look boring. */
 typedef struct pattern_t {
   void (*init)();
   void (*frame)();
-  uint32_t (*get)(uint8_t);
+  rgb24 (*get)(uint8_t);
 } pattern;
 
 /* Add the patterns you wish to display into this structure
@@ -97,6 +97,6 @@ void frame(void) {
   patterns[current_pattern].frame();
 }
 
-uint32_t getled(uint8_t index) {
+rgb24 getled(uint8_t index) {
   return patterns[current_pattern].get(index);
 }

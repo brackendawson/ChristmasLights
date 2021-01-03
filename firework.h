@@ -3,7 +3,7 @@ is a good idea to prefix the pattern name. */
 uint8_t firework_pos;
 uint8_t firework_exp_pos;
 uint8_t firework_col;
-uint32_t firework_exp_col;
+rgb24 firework_exp_col;
 uint8_t firework_size;
 enum firework_states {
   LAUNCHED = 1,
@@ -40,10 +40,6 @@ second while displaying this pattern. It should be fairly
 efficient, if it takes too long P1.0 output will be set
 to 1 (red LED on launchpad). Prefixed with pattern name. */
 void firework_frame(void) {
-  /* colour(colour, brightness) is a useful helper function,
-    it will retrun the 24 bit RGB value as uint32_t for
-    a colour defined in ../colours.h and brightness from 0
-    to 99 as unsigned char. */
   if (firework_state == LAUNCHED) {
     if (firework_pos >= firework_exp_pos) {
       firework_state = EXPLODED;
@@ -66,17 +62,11 @@ void firework_frame(void) {
   return;
 }
 
-/* getled function for this pattern called many times in no
-guarented order, but always after the frame function has
-finished.
-Will be passed and uint8_t representing an LED index,
-you must return the 24bit RGB value as uint32_t for that
-LED. Your pattern should handle as many LEDs as are defined by
-NUM_LEDS, that's up to 255.
-Prefixed with pattern name. */
-uint32_t firework_getled(uint8_t led) {
+rgb24 firework_getled(uint8_t led) {
   if (firework_state == LAUNCHED) {
-    return firework_pos == led ? 0xff7f7f : 0x000000;
+    if (firework_pos == led) {
+      return (rgb24) {0xff,0x7f,0x7f};
+    }
   } else {
     for (uint8_t i = 0; i < 3; i++) {
       uint8_t offset = firework_pos >> i;
@@ -85,7 +75,7 @@ uint32_t firework_getled(uint8_t led) {
       }
     }
   }
-  return 0x000000;
+  return (rgb24) {0x00,0x00,0x00};
 }
 
 /* An alternate firework pattern without the rocket visible. */

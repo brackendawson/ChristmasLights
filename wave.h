@@ -17,7 +17,7 @@ void wave_frame(void) {
   return;
 }
 
-uint32_t wave_getled(uint8_t led) {
+rgb24 wave_getled(uint8_t led) {
   led+=INDIGO*2;
   if ((led-wave_pos)%2==0) {
     return(colour(((led-wave_pos)%((INDIGO-RED+1)*2))/2+RED,100-wave_brt));

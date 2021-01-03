@@ -1,5 +1,12 @@
 /*This header defines the colors, sub-pixel tables and the colour() function. */
 
+// rgb24 is a type to hold 24bit colour
+typedef struct rgb24_t {
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
+} rgb24;
+
 #define BLACK	0	//  0   0   0
 #define WHITE	1	//255 255 255
 #define RED	2	//255   0   0
@@ -40,30 +47,55 @@ static const uint8_t SUBP_80[] = {
 This function takes a colour defined in the table at the top of this file and a
 brightness in the range of 0 to 99 where 0 is off and 99 (or higher)
 is fully bright, the ramp is liner if the tables were generated with a good power.
-It returns a uint32_t contining a 24-bit RGB value from LSB to bit 23, bits
-24 to 31 are reserved. */
-uint32_t colour(uint8_t colour, uint8_t brightness) {
+It returns the 24bit rgb value as an rgb24. */
+rgb24 colour(uint8_t colour, uint8_t brightness) {
   if (brightness > 99) {
     brightness = 99;
   }
-  uint32_t value = SUBP_255[brightness];
+
+  rgb24 col;
+
   switch (colour) {
     case BLACK:
-      return 0;
+      col.r = 0;
+      col.g = 0;
+      col.b = 0;
+      break;
     case WHITE:
-      return (value << 16) | (value << 8) | value;
+      col.r = SUBP_255[brightness];
+      col.g = SUBP_255[brightness];
+      col.b = SUBP_255[brightness];
+      break;
     case RED:
-      return value << 16;
+      col.r = SUBP_255[brightness];
+      col.g = 0;
+      col.b = 0;
+      break;
     case ORANGE:
-      return (value << 16) | ((value>>3) << 8);
+      col.r = SUBP_255[brightness];
+      col.g = SUBP_255[brightness] >> 3;
+      col.b = 0;
+      break;
     case YELLOW:
-      return (value << 16) | (SUBP_112[brightness] << 8);
+      col.r = SUBP_255[brightness];
+      col.g = SUBP_112[brightness];
+      col.b = 0;
+      break;
     case GREEN:
-      return value << 8;
+      col.r = 0;
+      col.g = SUBP_255[brightness];
+      col.b = 0;
+      break;
     case BLUE:
-      return value;
+      col.r = 0;
+      col.g = 0;
+      col.b = SUBP_255[brightness];
+      break;
     default:
-      return (value << 16) | SUBP_80[brightness];
+      col.r = SUBP_255[brightness];
+      col.g = 0;
+      col.b = SUBP_80[brightness];
   }
+  return(col);
 }
 

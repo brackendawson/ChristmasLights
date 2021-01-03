@@ -55,18 +55,15 @@ void fade_frame(void) {
   return;
 }
 
-/* getled function for this pattern called many times in no
-guarented order, but always after the frame function has
-finished.
-Will be passed and uint8_t representing an LED index,
-you must return the 24bit RGB value as uint32_t for that
-LED. Your pattern should handle as many LEDs as are defined by
+/* getled function for this pattern called many times in no guarented order,
+but always after the frame function has finished.
+Will be passed and uint8_t representing an LED index, you must return the rgb24
+value for that LED. Your pattern should handle as many LEDs as are defined by
 NUM_LEDS, that's up to 255.
 Prefixed with pattern name. */
-uint32_t fade_getled(uint8_t led) {
-  /* colour(colour, brightness) is a useful helper function,
-    it will retrun the 24 bit RGB value as uint32_t for
-    a colour defined in ../colours.h and brightness from 0
-    to 99 as unsigned char. */
+rgb24 fade_getled(uint8_t led) {
+  /* colour(colour, brightness) is a useful helper function, it will retrun the
+  rgb24 value for a colour defined in ../colours.h and brightness from 0 to 99
+  as unsigned char. */
   return colour((*fade_buffer)[led%6], fade_pat_brt);
 }

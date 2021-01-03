@@ -25,7 +25,7 @@ void run_frame(void) {
 }
 
 //getled function
-uint32_t run_getled(uint8_t led) {
+rgb24 run_getled(uint8_t led) {
   if (led == run_index) {
     return(colour(run_colour,99));
   } else if (led == run_index - 1) {

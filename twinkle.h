@@ -1,7 +1,5 @@
 static bool (*twinkle_buffer)[REPEAT_LENGTH] = (bool(*)[16]) &common_buffer;
 static_assert(sizeof(*twinkle_buffer) <= sizeof(common_buffer), "twinkle_buffer must fit in common_buffer");
-#define TWINKLE_ON	0x00FFFFFF
-#define TWINKLE_OFF	0x00000000
 uint8_t twinkle_i;
 uint8_t twinkle_div;
 
@@ -36,10 +34,10 @@ void twinkle_frame(void) {
 }
 
 //getled function
-uint32_t twinkle_getled(uint8_t led) {
+rgb24 twinkle_getled(uint8_t led) {
   if ((*twinkle_buffer)[led % REPEAT_LENGTH]) {
-    return(TWINKLE_ON);
+    return(colour(WHITE,99));
   } else {
-    return(TWINKLE_OFF);
+    return(colour(BLACK,99));
   }
 }

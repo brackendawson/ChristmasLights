@@ -22,10 +22,6 @@ second while displaying this pattern. It should be fairly
 efficient, if it takes too long P1.0 output will be set
 to 1 (red LED on launchpad). Prefixed with pattern name. */
 void pacman_frame(void) {
-  /* colour(colour, brightness) is a useful helper function,
-    it will retrun the 24 bit RGB value as uint32_t for
-    a colour defined in ../colours.h and brightness from 0
-    to 99 as unsigned char. */
   if (pacman_slow++ < 8) {
     return;
   }
@@ -47,32 +43,39 @@ void pacman_frame(void) {
   return;
 }
 
-/* getled function for this pattern called many times in no
-guarented order, but always after the frame function has
-finished.
-Will be passed and uint8_t representing an LED index,
-you must return the 24bit RGB value as uint32_t for that
-LED. Your pattern should handle as many LEDs as are defined by
-NUM_LEDS, that's up to 255.
-Prefixed with pattern name. */
-uint32_t pacman_getled(uint8_t led) {
+rgb24 pacman_getled(uint8_t led) {
   if (pacman_pos == led) {
-    return 0xff7a00; // pacman
+    return (rgb24) {0xff,0xa0,0x00};
   }
 
   // orange ghost
-  if (led+6 == pacman_pos) return pacman_dir ? 0xff2000 : 0x00007f;
+  if (led+6 == pacman_pos) {
+    if (pacman_dir) {
+      return (rgb24) {0xff,0x20,0x00};
+     }
+     return (rgb24) {0x00,0x00,0x7f};
+  }
 
   // cyan ghost
-  if (led+12 == pacman_pos) return pacman_dir ? 0x00ffff : 0x00007f;
+  if (led+12 == pacman_pos) {
+    if (pacman_dir) {
+      return (rgb24) {0x00,0xff,0xff};
+    }
+    return (rgb24) {0x00,0x00,0x7f};
+  }
 
   // pink ghost
-  if (led+16 == pacman_pos) return pacman_dir ? 0xff0050 : 0x00007f;
+  if (led+16 == pacman_pos) {
+    if (pacman_dir) {
+      return (rgb24) {0xff,0x00,0x50};
+    }
+    return (rgb24) {0x00,0x00,0x7f};
+  }
 
   if (pacman_dir) {
     // TOFIX: underflows when pacman_pos < 10 and NUM_LEDS is close to 255
-    if (led+1 == NUM_LEDS) return 0xff0000; // red cherry
-    if ( (led % 2 == 0) & (led > pacman_pos) ) return 0xffffff;
+    if (led+1 == NUM_LEDS) return (rgb24) {0xff,0x00,0x00}; // red cherry
+    if ((led % 2 == 0) & (led > pacman_pos)) return (rgb24) {0xff,0xff,0xff};
   }
-  return 0x000000;
+  return (rgb24) {0x00,0x00,0x00};
 }

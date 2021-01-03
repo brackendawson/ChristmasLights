@@ -59,7 +59,7 @@ void tetris_frame(void) {
   return;
 }
 
-uint32_t tetris_getled(uint8_t led) {
+rgb24 tetris_getled(uint8_t led) {
   led += 1;
   for (uint8_t i = 0; i < TETRIS_PIECES; i++) {
     if ((*tetris_pieces)[i].pos == 0) {
@@ -73,5 +73,5 @@ uint32_t tetris_getled(uint8_t led) {
     }
     return colour((*tetris_pieces)[i].col, 99);
   }
-  return 0;
+  return (rgb24) {0x00,0x00,0x00};
 }

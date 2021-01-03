@@ -65,13 +65,13 @@ void loop() {
 void stringsend(void) {
   memset(leds, 255, NUM_LEDS * 3);
   for(int i = 0 ; i < NUM_LEDS; i++ ) {
-    unsigned long current_led = getled(i);
+    rgb24 current_led = getled(i);
     //transmit red
-    leds[i].r = current_led >> 16;
+    leds[i].r = current_led.r;
     //transmit green
-    leds[i].g = current_led >> 8;
+    leds[i].g = current_led.g;
     //transmit blue
-    leds[i].b = current_led;
+    leds[i].b = current_led.b;
   }
   FastLED.show();
   delay(40); // without this lights are "random"

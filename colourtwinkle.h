@@ -31,6 +31,6 @@ void colourtwinkle_frame(void) {
 }
 
 //getled function
-uint32_t colourtwinkle_getled(uint8_t led) {
+rgb24 colourtwinkle_getled(uint8_t led) {
   return colour((*colourtwinkle_buffer)[led % REPEAT_LENGTH], 99);
 }

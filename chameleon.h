@@ -34,7 +34,6 @@ void chameleon_frame(void) {
 }
 
 //getled function
-uint32_t chameleon_getled(uint8_t led) {
-  uint32_t col = colour(chameleon_colour, chameleon_brightness);
-  return(col);
+rgb24 chameleon_getled(uint8_t led) {
+  return(colour(chameleon_colour, chameleon_brightness));
 }

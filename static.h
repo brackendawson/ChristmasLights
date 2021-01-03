@@ -1,5 +1,5 @@
 //Definitions for this pattern
-static uint32_t (*static_buffer)[6] = (uint32_t(*)[6]) &common_buffer;
+static rgb24 (*static_buffer)[6] = (rgb24(*)[6]) &common_buffer;
 static_assert(sizeof(*static_buffer) <= sizeof(common_buffer), "static_buffer must fit in common_buffer");
 
 //functions for this pattern
@@ -21,6 +21,6 @@ void static_frame(void) {
 }
 
 /* getled function */
-uint32_t static_getled(uint8_t led) {
+rgb24 static_getled(uint8_t led) {
   return (*static_buffer)[led%6];
 }
